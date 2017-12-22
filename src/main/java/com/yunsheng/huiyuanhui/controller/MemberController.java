@@ -1,6 +1,7 @@
 package com.yunsheng.huiyuanhui.controller;
 
 import com.yunsheng.huiyuanhui.dto.Member;
+import com.yunsheng.huiyuanhui.dto.MyResult;
 
 
 import org.apache.commons.lang3.StringUtils;
@@ -19,21 +20,26 @@ public class MemberController {
 
     @RequestMapping("/{userId}/allMember")
     @ResponseBody
-    public List<Member> getAllMember(@PathVariable String userId) {
-        List<Member> result = new ArrayList<>();
+    public MyResult<List<Member>> getAllMember(@PathVariable String userId) {
+        MyResult result = new MyResult();
+
+        List<Member> membersResult = new ArrayList<>();
         if (StringUtils.isBlank(userId)) {
             return result;
         }
 
         // mock
         Member a = getOneMock("aa");
-        result.add(a);
+        membersResult.add(a);
         Member b = getOneMock("bb");
-        result.add(b);
+        membersResult.add(b);
         Member c = getOneMock("cc");
-        result.add(c);
+        membersResult.add(c);
         Member d = getOneMock("dd");
-        result.add(d);
+        membersResult.add(d);
+
+        result.setData(membersResult);
+        result.setSuccess(true);
 
         return result;
     }
@@ -45,6 +51,36 @@ public class MemberController {
         one.setMemId(String.valueOf(new Random().nextInt()));
         one.setPhone("1234568");
         return one;
+    }
+
+    @RequestMapping("/{userId}/detail")
+    @ResponseBody
+    public Member getMember(@PathVariable String userId) {
+        Member result = new Member();
+        if (StringUtils.isBlank(userId)) {
+            return result;
+        }
+
+        // mock
+        Member a = getOneMock("aa");
+
+        return a;
+    }
+
+    @RequestMapping("/{userId}/status")
+    @ResponseBody
+    public String getMemberStaus(@PathVariable String userId) {
+
+        return "ok";
+    }
+
+    @RequestMapping("/add")
+    @ResponseBody
+    public String addMember(Member member) {
+
+        System.out.println(member);
+
+        return "ok";
     }
 
 }
