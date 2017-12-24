@@ -1,14 +1,13 @@
 package com.yunsheng.huiyuanhui.controller;
 
-import com.yunsheng.huiyuanhui.dto.Member;
 import com.yunsheng.huiyuanhui.dto.MyResult;
 
 
+import com.yunsheng.huiyuanhui.model.Member;
+import com.yunsheng.huiyuanhui.service.MemberService;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +16,9 @@ import java.util.Random;
 @RestController
 @RequestMapping("/api/member")
 public class MemberController {
+
+    @Autowired
+    private MemberService memberService;
 
     @RequestMapping("/{userId}/allMember")
     @ResponseBody
@@ -47,8 +49,7 @@ public class MemberController {
     private Member getOneMock(String dd) {
         Member one = new Member();
         one.setName(dd);
-        one.setAge(23);
-        one.setMemId(String.valueOf(new Random().nextInt()));
+        one.setMemid(Integer.valueOf(new Random().nextInt()));
         one.setPhone("1234568");
         return one;
     }
@@ -74,13 +75,16 @@ public class MemberController {
         return "ok";
     }
 
-    @RequestMapping("/add")
+    @PostMapping("/add")
     @ResponseBody
-    public String addMember(Member member) {
+    public String addMember(@RequestBody Member member) {
+        int record = memberService.insertRecord(member);
+        if (record == 1) {
 
-        System.out.println(member);
-
-        return "ok";
+            return "ok";
+        } else {
+            return "error";
+        }
     }
 
 }
