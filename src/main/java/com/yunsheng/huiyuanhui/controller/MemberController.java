@@ -9,9 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/member")
@@ -49,7 +47,7 @@ public class MemberController {
     private Member getOneMock(String dd) {
         Member one = new Member();
         one.setName(dd);
-        one.setMemid(Integer.valueOf(new Random().nextInt()));
+        one.setMemberId(Integer.valueOf(new Random().nextInt()));
         one.setPhone("1234568");
         return one;
     }
@@ -77,14 +75,16 @@ public class MemberController {
 
     @PostMapping("/add")
     @ResponseBody
-    public String addMember(@RequestBody Member member) {
+    public Map addMember(@RequestBody Member member) {
+        Map<String, Boolean> result = new HashMap<>();
         int record = memberService.insertRecord(member);
         if (record == 1) {
-
-            return "ok";
+            result.put("success", true);
         } else {
-            return "error";
+            result.put("success", false);
         }
+
+        return result;
     }
 
 }
