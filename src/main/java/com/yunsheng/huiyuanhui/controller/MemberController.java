@@ -18,9 +18,9 @@ public class MemberController {
     @Autowired
     private MemberService memberService;
 
-    @RequestMapping("/{userId}/allMember")
+    @RequestMapping("/{userId}/allMember/{phone}")
     @ResponseBody
-    public MyResult<List<Member>> getAllMember(@PathVariable String userId) {
+    public MyResult<List<Member>> getAllMember(@PathVariable String userId, @PathVariable String phone) {
         MyResult result = new MyResult();
 
         List<Member> membersResult = new ArrayList<>();
