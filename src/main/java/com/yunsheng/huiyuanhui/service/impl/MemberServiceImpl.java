@@ -1,7 +1,8 @@
-package com.yunsheng.huiyuanhui.service;
+package com.yunsheng.huiyuanhui.service.impl;
 
 import com.yunsheng.huiyuanhui.mapper.MemberMapper;
 import com.yunsheng.huiyuanhui.model.Member;
+import com.yunsheng.huiyuanhui.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
