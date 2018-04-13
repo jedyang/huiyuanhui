@@ -1,14 +1,31 @@
 package com.yunsheng.huiyuanhui.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.yunsheng.huiyuanhui.dto.MyResult;
 
 
 import com.yunsheng.huiyuanhui.model.Member;
 import com.yunsheng.huiyuanhui.service.MemberService;
+
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.util.EntityUtils;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Random;
 import java.util.*;
 
 @RestController
@@ -18,9 +35,39 @@ public class MemberController {
     @Autowired
     private MemberService memberService;
 
-    @RequestMapping("/{userId}/allMember/{phone}")
+    private String appId = "wxdb03a70e4c13e84b";
+
+    private String secret = "b6e47be14d284856617db379aa16be4d";
+
+    @RequestMapping("/onLogin")
     @ResponseBody
-    public MyResult<List<Member>> getAllMember(@PathVariable String userId, @PathVariable String phone) {
+    public MyResult<HashMap> onLogin(String code) {
+        MyResult result = new MyResult();
+        HashMap<String, String> auth = new HashMap<>();
+
+        // https://api.weixin.qq.com/sns/jscode2session?appid=APPID&secret=SECRET&js_code=JSCODE&grant_type=authorization_code
+        StringBuilder urlPath = new StringBuilder("https://api.weixin.qq.com/sns/jscode2session"); // 微信提供的API，这里最好也放在配置文件
+        urlPath.append(String.format("?appid=%s", appId));
+        urlPath.append(String.format("&secret=%s", secret));
+        urlPath.append(String.format("&js_code=%s", code));
+        urlPath.append(String.format("&grant_type=%s", "authorization_code")); // 固定值
+        String data = sendPost(urlPath.toString());
+        System.out.println("请求结果：" + data);
+//        {"session_key":"c1BSzC0xC2VFUvh3pwI9hg==","openid":"otzPb4iLljrVcrwYU0lIDcwBy0vc"}
+        String openId = (String) JSONObject.parseObject(data).get("openid");
+        String sessionkey = (String) JSONObject.parseObject(data).get("session_key");
+        auth.put("openId", openId);
+        auth.put("loginSessionKey", openId);
+        // 将sessionkey对应生成第三方session，存到redis。用于交互
+
+        result.setSuccess(true);
+        result.setData(auth);
+        return result;
+    }
+
+    @RequestMapping("/{userId}/allMember")
+    @ResponseBody
+    public MyResult<List<Member>> getAllMember(@PathVariable String userId) {
         MyResult result = new MyResult();
 
         List<Member> membersResult = new ArrayList<>();
@@ -87,4 +134,20 @@ public class MemberController {
         return result;
     }
 
+
+    public static String sendPost(String url) {
+        String result = "";
+
+        HttpClient client = HttpClientBuilder.create().build();
+        HttpPost httpPost = new HttpPost(url);
+
+        try {
+            HttpResponse httpResponse = client.execute(httpPost);
+            HttpEntity responseEntity = httpResponse.getEntity();
+            result = EntityUtils.toString(responseEntity, "utf-8");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
 }
