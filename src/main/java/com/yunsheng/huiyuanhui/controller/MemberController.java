@@ -9,6 +9,7 @@ import com.yunsheng.huiyuanhui.service.MemberService;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
@@ -28,12 +29,17 @@ import java.util.List;
 import java.util.Random;
 import java.util.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 @RestController
 @RequestMapping("/api/member")
 public class MemberController {
 
     @Autowired
     private MemberService memberService;
+
 
     private String appId = "wxdb03a70e4c13e84b";
 
@@ -67,8 +73,11 @@ public class MemberController {
 
     @RequestMapping("/{userId}/allMember")
     @ResponseBody
-    public MyResult<List<Member>> getAllMember(@PathVariable String userId) {
+    public MyResult<List<Member>> getAllMember(@PathVariable String userId, HttpServletRequest request) {
         MyResult result = new MyResult();
+
+        HttpSession session = request.getSession();
+        Cookie[] cookies = request.getCookies();
 
         List<Member> membersResult = new ArrayList<>();
         if (StringUtils.isBlank(userId)) {
@@ -84,6 +93,8 @@ public class MemberController {
         membersResult.add(c);
         Member d = getOneMock("dd");
         membersResult.add(d);
+
+//        memberService.selectAllMember(userId);
 
         result.setData(membersResult);
         result.setSuccess(true);

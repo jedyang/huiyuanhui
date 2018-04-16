@@ -5,6 +5,8 @@ public class Member {
 
     private Integer userId;
 
+    private String openId;
+
     private String name;
 
     private String phone;
@@ -14,6 +16,14 @@ public class Member {
     private Double money;
 
     private Integer points;
+
+    public String getOpenId() {
+        return openId;
+    }
+
+    public void setOpenId(String openId) {
+        this.openId = openId;
+    }
 
     public Integer getMemberId() {
         return memberId;

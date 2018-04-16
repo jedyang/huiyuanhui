@@ -50,4 +50,15 @@ public class Shop {
     public void setShopDesc(String shopDesc) {
         this.shopDesc = shopDesc == null ? null : shopDesc.trim();
     }
+
+    @Override
+    public String toString() {
+        return "Shop{" +
+                "shopId=" + shopId +
+                ", shopName='" + shopName + '\'' +
+                ", shopAddr='" + shopAddr + '\'' +
+                ", shopUserId=" + shopUserId +
+                ", shopDesc='" + shopDesc + '\'' +
+                '}';
+    }
 }

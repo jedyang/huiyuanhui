@@ -5,6 +5,8 @@ import java.util.Date;
 public class ShopUser {
     private Integer userId;
 
+    private String openId;
+
     private String passwd;
 
     private String userName;
@@ -21,6 +23,14 @@ public class ShopUser {
 
     public void setUserId(Integer userId) {
         this.userId = userId;
+    }
+
+    public String getOpenId() {
+        return openId;
+    }
+
+    public void setOpenId(String openId) {
+        this.openId = openId == null ? null : openId.trim();
     }
 
     public String getPasswd() {

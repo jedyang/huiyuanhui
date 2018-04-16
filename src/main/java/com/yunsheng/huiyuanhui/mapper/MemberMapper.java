@@ -2,6 +2,7 @@ package com.yunsheng.huiyuanhui.mapper;
 
 import com.yunsheng.huiyuanhui.model.Member;
 
+
 public interface MemberMapper {
     int deleteByPrimaryKey(Integer memberId);
 
