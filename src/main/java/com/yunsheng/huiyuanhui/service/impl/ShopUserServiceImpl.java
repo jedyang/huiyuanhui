@@ -29,7 +29,7 @@ public class ShopUserServiceImpl implements ShopUserService {
 
     @Override
     public ShopUser findByOpenId(String openId) {
-        shopUserMapper.selectByOpenId(ShopUser openId);
-        return null;
+        ShopUser shopUser = shopUserMapper.selectByOpenId(openId);
+        return shopUser;
     }
 }

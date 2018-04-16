@@ -38,19 +38,24 @@ public class ShopController {
         // 先查询该微信用户是否已经注册过
         // 正常到这步的应该已经注册过了
         ShopUser userByOpenId = shopUserService.findByOpenId(openId);
+        if (null == userByOpenId) {
+            ShopUser shopUser = new ShopUser();
+            shopUser.setOpenId(openId);
+            shopUserService.addShopUser(shopUser);
+            userByOpenId = shopUserService.findByOpenId(openId);
+        }
 
-        ShopUser shopUser = new ShopUser();
-        shopUser.setOpenId(openId);
-        int addResult = shopUserService.addShopUser(shopUser);
 
-        if (addResult == 1){
-            ShopUser param = new ShopUser();
-            param.setOpenId(openId);
-            List<ShopUser> shopUser1 = shopUserService.findBySelect(param);
-            if (userByOpenId != null){
-                // 存店铺信息
-                shopInfo.setShopUserId(userByOpenId.getUserId());
-                boolean insertShop = shopService.insertShop(shopInfo);
+        if (userByOpenId != null) {
+            // 存店铺信息
+            shopInfo.setShopUserId(userByOpenId.getUserId());
+            boolean insertShop = shopService.insertShop(shopInfo);
+
+            // 存店铺和user的对应关系，支持多对多
+            if (insertShop) {
+
+            } else {
+                logger.error("insertShop error");
             }
         }
 
