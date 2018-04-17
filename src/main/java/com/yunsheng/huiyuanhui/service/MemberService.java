@@ -10,4 +10,6 @@ public interface MemberService {
 
     List<Member> selectAllMember(Integer userId);
 
+    Member findByOpenId(String openId);
+
 }

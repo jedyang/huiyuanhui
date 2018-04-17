@@ -5,6 +5,7 @@ import com.yunsheng.huiyuanhui.model.ShopUser;
 import com.yunsheng.huiyuanhui.model.front.ShopInfo;
 import com.yunsheng.huiyuanhui.service.ShopService;
 import com.yunsheng.huiyuanhui.service.ShopUserService;
+import com.yunsheng.huiyuanhui.util.WeiXinUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +27,9 @@ public class ShopController {
 
     @Autowired
     private ShopUserService shopUserService;
+
+    @Autowired
+    private WeiXinUtil weiXinUtil;
 
     @PostMapping("/add")
     @ResponseBody
@@ -62,6 +66,14 @@ public class ShopController {
 
         result.put("success", true);
         return result;
+    }
+
+    @GetMapping("/getAccessToken")
+    @ResponseBody
+    public String getAccessToken() {
+        logger.info("===getAccessToken===");
+        String accessToken = weiXinUtil.getAccessToken();
+        return accessToken;
     }
 
 }

@@ -6,6 +6,8 @@ import com.yunsheng.huiyuanhui.dto.MyResult;
 
 import com.yunsheng.huiyuanhui.model.Member;
 import com.yunsheng.huiyuanhui.service.MemberService;
+import com.yunsheng.huiyuanhui.util.Constants;
+import com.yunsheng.huiyuanhui.util.HttpUtil;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
@@ -41,10 +43,6 @@ public class MemberController {
     private MemberService memberService;
 
 
-    private String appId = "wxdb03a70e4c13e84b";
-
-    private String secret = "b6e47be14d284856617db379aa16be4d";
-
     @RequestMapping("/onLogin")
     @ResponseBody
     public MyResult<HashMap> onLogin(String code) {
@@ -53,11 +51,11 @@ public class MemberController {
 
         // https://api.weixin.qq.com/sns/jscode2session?appid=APPID&secret=SECRET&js_code=JSCODE&grant_type=authorization_code
         StringBuilder urlPath = new StringBuilder("https://api.weixin.qq.com/sns/jscode2session"); // 微信提供的API，这里最好也放在配置文件
-        urlPath.append(String.format("?appid=%s", appId));
-        urlPath.append(String.format("&secret=%s", secret));
+        urlPath.append(String.format("?appid=%s", Constants.APPID));
+        urlPath.append(String.format("&secret=%s", Constants.APPSECRET));
         urlPath.append(String.format("&js_code=%s", code));
         urlPath.append(String.format("&grant_type=%s", "authorization_code")); // 固定值
-        String data = sendPost(urlPath.toString());
+        String data = HttpUtil.sendGet(urlPath.toString());
         System.out.println("请求结果：" + data);
 //        {"session_key":"c1BSzC0xC2VFUvh3pwI9hg==","openid":"otzPb4iLljrVcrwYU0lIDcwBy0vc"}
         String openId = (String) JSONObject.parseObject(data).get("openid");
@@ -71,6 +69,12 @@ public class MemberController {
         return result;
     }
 
+    /**
+     * 查询该店铺下所有会员
+     * @param userId
+     * @param request
+     * @return
+     */
     @RequestMapping("/{userId}/allMember")
     @ResponseBody
     public MyResult<List<Member>> getAllMember(@PathVariable String userId, HttpServletRequest request) {
@@ -131,11 +135,27 @@ public class MemberController {
         return "ok";
     }
 
+    /**
+     *
+     * 新增用户可能通过商家的二维码进来
+     * 或者推广的平台二维码
+     *
+     * @param member
+     * @return
+     */
     @PostMapping("/add")
     @ResponseBody
     public Map addMember(@RequestBody Member member) {
         Map<String, Boolean> result = new HashMap<>();
-        int record = memberService.insertRecord(member);
+        // 一个用户可以注册多个店铺的会员
+        // 先查询是否以注册过用户
+        Member memberByOpenId = memberService.findByOpenId(member.getOpenId());
+
+        if (null == memberByOpenId){
+            int record = memberService.insertRecord(member);
+        }
+
+
         if (record == 1) {
             result.put("success", true);
         } else {
@@ -146,19 +166,4 @@ public class MemberController {
     }
 
 
-    public static String sendPost(String url) {
-        String result = "";
-
-        HttpClient client = HttpClientBuilder.create().build();
-        HttpPost httpPost = new HttpPost(url);
-
-        try {
-            HttpResponse httpResponse = client.execute(httpPost);
-            HttpEntity responseEntity = httpResponse.getEntity();
-            result = EntityUtils.toString(responseEntity, "utf-8");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return result;
-    }
 }

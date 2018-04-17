@@ -3,7 +3,8 @@ package com.yunsheng.huiyuanhui.model;
 public class Member {
     private Integer memberId;
 
-    private Integer userId;
+    // 数据库里没这个字段，用来给前端使用，传递本次是注册为哪家店铺的会员
+    private Integer shopId;
 
     private String openId;
 
@@ -33,12 +34,12 @@ public class Member {
         this.memberId = memberId;
     }
 
-    public Integer getUserId() {
-        return userId;
+    public Integer getShopId() {
+        return shopId;
     }
 
-    public void setUserId(Integer userId) {
-        this.userId = userId;
+    public void setShopId(Integer shopId) {
+        this.shopId = shopId;
     }
 
     public String getName() {
