@@ -156,12 +156,7 @@ public class MemberController {
         }
 
 
-        if (record == 1) {
-            result.put("success", true);
-        } else {
-            result.put("success", false);
-        }
-
+        result.put("success", false);
         return result;
     }
 

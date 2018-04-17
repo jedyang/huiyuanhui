@@ -23,4 +23,9 @@ public class MemberServiceImpl implements MemberService {
     public List<Member> selectAllMember(Integer userId) {
         return null;
     }
+
+    @Override
+    public Member findByOpenId(String openId) {
+        return null;
+    }
 }
