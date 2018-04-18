@@ -3,6 +3,7 @@ package com.yunsheng.huiyuanhui.service.impl;
 import com.yunsheng.huiyuanhui.mapper.MemberMapper;
 import com.yunsheng.huiyuanhui.model.Member;
 import com.yunsheng.huiyuanhui.service.MemberService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +27,19 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Member findByOpenId(String openId) {
-        return null;
+        Member member = new Member();
+        member.setOpenId(openId);
+        List<Member> result = memberMapper.selectBySelective(member);
+        if (result != null && result.size() > 0) {
+            return result.get(0);
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public List<Member> queryAllMembersOfShop(Integer shopId) {
+        List<Member> members = memberMapper.selectAllMembersOfShop(shopId);
+        return members;
     }
 }

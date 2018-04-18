@@ -1,8 +1,11 @@
 package com.yunsheng.huiyuanhui.mapper;
 
+import com.yunsheng.huiyuanhui.model.Member;
 import com.yunsheng.huiyuanhui.model.ShopMemberMap;
 
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository("shopMemberMapMapper")
 public interface ShopMemberMapMapper {
@@ -17,4 +20,5 @@ public interface ShopMemberMapMapper {
     int updateByPrimaryKeySelective(ShopMemberMap record);
 
     int updateByPrimaryKey(ShopMemberMap record);
+
 }

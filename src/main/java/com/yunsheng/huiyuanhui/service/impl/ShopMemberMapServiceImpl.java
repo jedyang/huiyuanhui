@@ -1,11 +1,14 @@
 package com.yunsheng.huiyuanhui.service.impl;
 
 import com.yunsheng.huiyuanhui.mapper.ShopMemberMapMapper;
+import com.yunsheng.huiyuanhui.model.Member;
 import com.yunsheng.huiyuanhui.model.ShopMemberMap;
 import com.yunsheng.huiyuanhui.service.ShopMemberMapService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service("shopMemberMapService")
 public class ShopMemberMapServiceImpl implements ShopMemberMapService {
@@ -18,4 +21,5 @@ public class ShopMemberMapServiceImpl implements ShopMemberMapService {
         int insertSelective = shopMemberMapMapper.insertSelective(shopMemberMap);
         return insertSelective;
     }
+
 }

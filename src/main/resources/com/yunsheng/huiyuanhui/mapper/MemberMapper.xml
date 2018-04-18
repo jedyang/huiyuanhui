@@ -4,7 +4,6 @@
 <mapper namespace="com.yunsheng.huiyuanhui.mapper.MemberMapper">
     <resultMap id="BaseResultMap" type="com.yunsheng.huiyuanhui.model.Member">
         <id column="member_id" property="memberId" jdbcType="INTEGER"/>
-        <result column="user_id" property="userId" jdbcType="INTEGER"/>
         <result column="open_id" property="openId" jdbcType="VARCHAR"/>
         <result column="name" property="name" jdbcType="VARCHAR"/>
         <result column="phone" property="phone" jdbcType="VARCHAR"/>
@@ -13,7 +12,10 @@
         <result column="points" property="points" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
-        member_id, user_id, open_id, name, phone, passwd, money, points
+        member_id, open_id, name, phone, passwd, money, points
+    </sql>
+    <sql id="Base_Column_List_m">
+        m.member_id, m.open_id, m.name, m.phone, m.passwd, m.money, m.points
     </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
@@ -21,15 +23,23 @@
         from member
         where member_id = #{memberId,jdbcType=INTEGER}
     </select>
+
+    <select id="selectBySelective" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from member
+        where member_id = #{memberId,jdbcType=INTEGER}
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         DELETE FROM member
         WHERE member_id = #{memberId,jdbcType=INTEGER}
     </delete>
     <insert id="insert" parameterType="com.yunsheng.huiyuanhui.model.Member">
-        INSERT INTO member (member_id, user_id, open_id, name,
+        INSERT INTO member (member_id, open_id, name,
                             phone, passwd, money,
                             points)
-        VALUES (#{memberId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{openId,jdbcType=VARCHAR},
+        VALUES (#{memberId,jdbcType=INTEGER}, #{openId,jdbcType=VARCHAR},
                 #{name,jdbcType=VARCHAR},
                 #{phone,jdbcType=VARCHAR}, #{passwd,jdbcType=VARCHAR}, #{money,jdbcType=DOUBLE},
                 #{points,jdbcType=INTEGER})
@@ -40,9 +50,7 @@
             <if test="memberId != null">
                 member_id,
             </if>
-            <if test="userId != null">
-                user_id,
-            </if>
+
             <if test="openId != null">
                 open_id,
             </if>
@@ -65,9 +73,6 @@
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="memberId != null">
                 #{memberId,jdbcType=INTEGER},
-            </if>
-            <if test="userId != null">
-                #{userId,jdbcType=INTEGER},
             </if>
             <if test="openId != null">
                 #{openId,jdbcType=VARCHAR},
@@ -92,11 +97,8 @@
     <update id="updateByPrimaryKeySelective" parameterType="com.yunsheng.huiyuanhui.model.Member">
         update member
         <set>
-            <if test="userId != null">
-                user_id = #{userId,jdbcType=INTEGER},
-            </if>
             <if test="openId != null">
-                name = #{open_id,jdbcType=VARCHAR},
+                openId = #{open_id,jdbcType=VARCHAR},
             </if>
             <if test="name != null">
                 name = #{name,jdbcType=VARCHAR},
@@ -118,8 +120,7 @@
     </update>
     <update id="updateByPrimaryKey" parameterType="com.yunsheng.huiyuanhui.model.Member">
         UPDATE member
-        SET user_id = #{userId,jdbcType=INTEGER},
-            open_id    = #{openId,jdbcType=VARCHAR},
+        SET open_id    = #{openId,jdbcType=VARCHAR},
             name    = #{name,jdbcType=VARCHAR},
             phone   = #{phone,jdbcType=VARCHAR},
             passwd  = #{passwd,jdbcType=VARCHAR},
@@ -127,4 +128,13 @@
             points  = #{points,jdbcType=INTEGER}
         WHERE member_id = #{memberId,jdbcType=INTEGER}
     </update>
+
+    <select id="selectAllMembersOfShop" parameterType="java.lang.Integer" resultType="com.yunsheng.huiyuanhui.model.Member">
+        select
+        <include refid="Base_Column_List"/>
+        from member m
+        INNER JOIN shop_member_map s
+        on s.member_id = m.member_id
+        and s.shop_id = #{shopId,jdbcType=INTEGER};
+    </select>
 </mapper>

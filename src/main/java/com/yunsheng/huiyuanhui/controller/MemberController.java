@@ -67,36 +67,19 @@ public class MemberController {
 
     /**
      * 查询该店铺下所有会员
-     * @param userId
-     * @param request
-     * @return
      */
-    @RequestMapping("/{userId}/allMember")
+    @RequestMapping("/{shopId}/allMember")
     @ResponseBody
-    public MyResult<List<Member>> getAllMember(@PathVariable String userId, HttpServletRequest request) {
+    public MyResult<List<Member>> getAllMember(@PathVariable String shopId) {
         MyResult result = new MyResult();
 
-        HttpSession session = request.getSession();
-        Cookie[] cookies = request.getCookies();
-
-        List<Member> membersResult = new ArrayList<>();
-        if (StringUtils.isBlank(userId)) {
+        if (StringUtils.isBlank(shopId)) {
             return result;
         }
 
-        // mock
-        Member a = getOneMock("aa");
-        membersResult.add(a);
-        Member b = getOneMock("bb");
-        membersResult.add(b);
-        Member c = getOneMock("cc");
-        membersResult.add(c);
-        Member d = getOneMock("dd");
-        membersResult.add(d);
+        List<Member> members = shopMemberMapService.queryAllMembersOfShop(Integer.parseInt(shopId));
 
-//        memberService.selectAllMember(userId);
-
-        result.setData(membersResult);
+        result.setData(members);
         result.setSuccess(true);
 
         return result;
@@ -132,12 +115,7 @@ public class MemberController {
     }
 
     /**
-     *
-     * 新增用户可能通过商家的二维码进来
-     * 或者推广的平台二维码
-     *
-     * @param member
-     * @return
+     * 新增用户可能通过商家的二维码进来 或者推广的平台二维码
      */
     @PostMapping("/add")
     @ResponseBody
@@ -147,14 +125,15 @@ public class MemberController {
         // 先查询是否以注册过用户
         Member memberByOpenId = memberService.findByOpenId(member.getOpenId());
 
-        if (null == memberByOpenId){
+        if (null == memberByOpenId) {
             memberService.insertRecord(member);
             memberByOpenId = memberService.findByOpenId(member.getOpenId());
         }
 
         // 存储对应关系
         Integer shopId = member.getShopId();
-        if(null != shopId){
+        if (null != shopId) {
+            // 先查询店铺是否存在
             // 非空说明是扫店铺码过来的
             ShopMemberMap shopMemberMap = new ShopMemberMap();
             shopMemberMap.setMemberId(memberByOpenId.getMemberId());
