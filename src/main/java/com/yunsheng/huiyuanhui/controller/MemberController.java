@@ -2,34 +2,27 @@ package com.yunsheng.huiyuanhui.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.yunsheng.huiyuanhui.dto.MyResult;
-
-
 import com.yunsheng.huiyuanhui.model.Member;
+import com.yunsheng.huiyuanhui.model.ShopMemberMap;
 import com.yunsheng.huiyuanhui.service.MemberService;
+import com.yunsheng.huiyuanhui.service.ShopMemberMapService;
 import com.yunsheng.huiyuanhui.util.Constants;
 import com.yunsheng.huiyuanhui.util.HttpUtil;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpRequest;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.util.EntityUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
-import java.util.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -41,6 +34,9 @@ public class MemberController {
 
     @Autowired
     private MemberService memberService;
+
+    @Autowired
+    private ShopMemberMapService shopMemberMapService;
 
 
     @RequestMapping("/onLogin")
@@ -152,7 +148,18 @@ public class MemberController {
         Member memberByOpenId = memberService.findByOpenId(member.getOpenId());
 
         if (null == memberByOpenId){
-            int record = memberService.insertRecord(member);
+            memberService.insertRecord(member);
+            memberByOpenId = memberService.findByOpenId(member.getOpenId());
+        }
+
+        // 存储对应关系
+        Integer shopId = member.getShopId();
+        if(null != shopId){
+            // 非空说明是扫店铺码过来的
+            ShopMemberMap shopMemberMap = new ShopMemberMap();
+            shopMemberMap.setMemberId(memberByOpenId.getMemberId());
+            shopMemberMap.setShopId(shopId);
+            shopMemberMapService.insertRecord(shopMemberMap);
         }
 
 
