@@ -1,7 +1,9 @@
 package com.yunsheng.huiyuanhui.mapper;
 
 import com.yunsheng.huiyuanhui.model.ShopUserMap;
+import org.springframework.stereotype.Repository;
 
+@Repository("shopUserMapMapper")
 public interface ShopUserMapMapper {
     int deleteByPrimaryKey(Integer id);
 

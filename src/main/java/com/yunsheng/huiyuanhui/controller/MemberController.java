@@ -10,6 +10,8 @@ import com.yunsheng.huiyuanhui.util.Constants;
 import com.yunsheng.huiyuanhui.util.HttpUtil;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,6 +33,7 @@ import javax.servlet.http.HttpSession;
 @RestController
 @RequestMapping("/api/member")
 public class MemberController {
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private MemberService memberService;
@@ -77,7 +80,7 @@ public class MemberController {
             return result;
         }
 
-        List<Member> members = shopMemberMapService.queryAllMembersOfShop(Integer.parseInt(shopId));
+        List<Member> members = memberService.queryAllMembersOfShop(Integer.parseInt(shopId));
 
         result.setData(members);
         result.setSuccess(true);
@@ -123,26 +126,32 @@ public class MemberController {
         Map<String, Boolean> result = new HashMap<>();
         // 一个用户可以注册多个店铺的会员
         // 先查询是否以注册过用户
-        Member memberByOpenId = memberService.findByOpenId(member.getOpenId());
+        try {
+            Member memberByOpenId = memberService.findByOpenId(member.getOpenId());
 
-        if (null == memberByOpenId) {
-            memberService.insertRecord(member);
-            memberByOpenId = memberService.findByOpenId(member.getOpenId());
+            if (null == memberByOpenId) {
+                memberService.insertRecord(member);
+                memberByOpenId = memberService.findByOpenId(member.getOpenId());
+            }
+
+            // 存储对应关系
+            Integer shopId = member.getShopId();
+            if (null != shopId) {
+                // 先查询店铺是否存在
+                // 非空说明是扫店铺码过来的
+                ShopMemberMap shopMemberMap = new ShopMemberMap();
+                shopMemberMap.setMemberId(memberByOpenId.getMemberId());
+                shopMemberMap.setShopId(shopId);
+                shopMemberMapService.insertRecord(shopMemberMap);
+            }
+            result.put("success", true);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            result.put("success", false);
+//            result.put("msg", "注册失败，请重试");
         }
 
-        // 存储对应关系
-        Integer shopId = member.getShopId();
-        if (null != shopId) {
-            // 先查询店铺是否存在
-            // 非空说明是扫店铺码过来的
-            ShopMemberMap shopMemberMap = new ShopMemberMap();
-            shopMemberMap.setMemberId(memberByOpenId.getMemberId());
-            shopMemberMap.setShopId(shopId);
-            shopMemberMapService.insertRecord(shopMemberMap);
-        }
 
-
-        result.put("success", false);
         return result;
     }
 

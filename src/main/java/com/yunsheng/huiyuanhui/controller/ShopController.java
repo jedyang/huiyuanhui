@@ -2,8 +2,10 @@ package com.yunsheng.huiyuanhui.controller;
 
 import com.yunsheng.huiyuanhui.model.Shop;
 import com.yunsheng.huiyuanhui.model.ShopUser;
+import com.yunsheng.huiyuanhui.model.ShopUserMap;
 import com.yunsheng.huiyuanhui.model.front.ShopInfo;
 import com.yunsheng.huiyuanhui.service.ShopService;
+import com.yunsheng.huiyuanhui.service.ShopUserMapService;
 import com.yunsheng.huiyuanhui.service.ShopUserService;
 import com.yunsheng.huiyuanhui.util.WeiXinUtil;
 
@@ -27,6 +29,9 @@ public class ShopController {
 
     @Autowired
     private ShopUserService shopUserService;
+
+    @Autowired
+    private ShopUserMapService shopUserMapService;
 
     @Autowired
     private WeiXinUtil weiXinUtil;
@@ -57,7 +62,10 @@ public class ShopController {
 
             // 存店铺和user的对应关系，支持多对多
             if (insertShop) {
-
+                ShopUserMap shopUserMap = new ShopUserMap();
+                shopUserMap.setShopid(shopInfo.getShopId());
+                shopUserMap.setUserid(userByOpenId.getUserId());
+                shopUserMapService.insertRecord(shopUserMap);
             } else {
                 logger.error("insertShop error");
             }
