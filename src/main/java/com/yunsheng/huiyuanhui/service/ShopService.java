@@ -2,6 +2,10 @@ package com.yunsheng.huiyuanhui.service;
 
 import com.yunsheng.huiyuanhui.model.Shop;
 
+import java.util.List;
+
 public interface ShopService {
-    boolean insertShop(Shop shop);
+    Integer insertShop(Shop shop);
+
+    List<Shop> findAllShopsOfUser(Integer userId);
 }

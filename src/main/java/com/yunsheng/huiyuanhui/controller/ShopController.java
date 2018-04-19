@@ -1,5 +1,6 @@
 package com.yunsheng.huiyuanhui.controller;
 
+import com.yunsheng.huiyuanhui.dto.MyResult;
 import com.yunsheng.huiyuanhui.model.Shop;
 import com.yunsheng.huiyuanhui.model.ShopUser;
 import com.yunsheng.huiyuanhui.model.ShopUserMap;
@@ -38,9 +39,9 @@ public class ShopController {
 
     @PostMapping("/add")
     @ResponseBody
-    public Map addShop(@RequestBody ShopInfo shopInfo) {
+    public MyResult addShop(@RequestBody ShopInfo shopInfo) {
         logger.info(shopInfo.toString());
-        Map<String, Boolean> result = new HashMap<>();
+        MyResult result = new MyResult();
 
         String openId = shopInfo.getOpenId();
         // 存店铺关联用户信息
@@ -57,23 +58,35 @@ public class ShopController {
 
         if (userByOpenId != null) {
             // 存店铺信息
-            shopInfo.setShopUserId(userByOpenId.getUserId());
-            boolean insertShop = shopService.insertShop(shopInfo);
+            Integer insertResult = shopService.insertShop(shopInfo);
 
+            Integer shopId = shopInfo.getShopId();
             // 存店铺和user的对应关系，支持多对多
-            if (insertShop) {
-                ShopUserMap shopUserMap = new ShopUserMap();
-                shopUserMap.setShopid(shopInfo.getShopId());
-                shopUserMap.setUserid(userByOpenId.getUserId());
-                shopUserMapService.insertRecord(shopUserMap);
-            } else {
-                logger.error("insertShop error");
-            }
+            ShopUserMap shopUserMap = new ShopUserMap();
+            shopUserMap.setShopid(shopId);
+            shopUserMap.setUserid(userByOpenId.getUserId());
+            shopUserMapService.insertRecord(shopUserMap);
+
         }
 
-
-        result.put("success", true);
+        result.setSuccess(true);
         return result;
+    }
+
+    /**
+     * 获取店铺信息
+     */
+    @GetMapping("/myShops")
+    @ResponseBody
+    public MyResult<List> getShopInfo(Integer userId) {
+        MyResult result = new MyResult();
+
+        List<Shop> allShopsOfUser = shopService.findAllShopsOfUser(userId);
+
+        result.setData(allShopsOfUser);
+        result.setSuccess(true);
+        return result;
+
     }
 
     @GetMapping("/getAccessToken")

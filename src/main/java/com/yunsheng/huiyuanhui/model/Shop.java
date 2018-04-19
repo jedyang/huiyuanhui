@@ -7,8 +7,6 @@ public class Shop {
 
     private String shopAddr;
 
-    private Integer shopUserId;
-
     private String shopDesc;
 
     public Integer getShopId() {
@@ -35,14 +33,6 @@ public class Shop {
         this.shopAddr = shopAddr == null ? null : shopAddr.trim();
     }
 
-    public Integer getShopUserId() {
-        return shopUserId;
-    }
-
-    public void setShopUserId(Integer shopUserId) {
-        this.shopUserId = shopUserId;
-    }
-
     public String getShopDesc() {
         return shopDesc;
     }
@@ -57,7 +47,6 @@ public class Shop {
                 "shopId=" + shopId +
                 ", shopName='" + shopName + '\'' +
                 ", shopAddr='" + shopAddr + '\'' +
-                ", shopUserId=" + shopUserId +
                 ", shopDesc='" + shopDesc + '\'' +
                 '}';
     }

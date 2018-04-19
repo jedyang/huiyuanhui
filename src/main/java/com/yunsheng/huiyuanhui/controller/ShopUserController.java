@@ -1,8 +1,6 @@
 package com.yunsheng.huiyuanhui.controller;
 
-import com.yunsheng.huiyuanhui.model.Shop;
 import com.yunsheng.huiyuanhui.model.ShopUser;
-import com.yunsheng.huiyuanhui.service.ShopService;
 import com.yunsheng.huiyuanhui.service.ShopUserService;
 
 import org.springframework.beans.factory.annotation.Autowired;

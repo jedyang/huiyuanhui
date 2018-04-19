@@ -1,93 +1,89 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yunsheng.huiyuanhui.mapper.ShopMapper">
-  <resultMap id="BaseResultMap" type="com.yunsheng.huiyuanhui.model.Shop">
-    <id column="shop_id" jdbcType="INTEGER" property="shopId" />
-    <result column="shop_name" jdbcType="VARCHAR" property="shopName" />
-    <result column="shop_addr" jdbcType="VARCHAR" property="shopAddr" />
-    <result column="shop_user_id" jdbcType="INTEGER" property="shopUserId" />
-    <result column="shop_desc" jdbcType="VARCHAR" property="shopDesc" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    shop_id, shop_name, shop_addr, shop_user_id, shop_desc
-  </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from shop
-    where shop_id = #{shopId,jdbcType=INTEGER}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from shop
-    where shop_id = #{shopId,jdbcType=INTEGER}
-  </delete>
-  <insert id="insert" parameterType="com.yunsheng.huiyuanhui.model.Shop">
-    insert into shop (shop_id, shop_name, shop_addr, 
-      shop_user_id, shop_desc)
-    values (#{shopId,jdbcType=INTEGER}, #{shopName,jdbcType=VARCHAR}, #{shopAddr,jdbcType=VARCHAR}, 
-      #{shopUserId,jdbcType=INTEGER}, #{shopDesc,jdbcType=VARCHAR})
-  </insert>
-  <insert id="insertSelective" parameterType="com.yunsheng.huiyuanhui.model.Shop">
-    insert into shop
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="shopId != null">
-        shop_id,
-      </if>
-      <if test="shopName != null">
-        shop_name,
-      </if>
-      <if test="shopAddr != null">
-        shop_addr,
-      </if>
-      <if test="shopUserId != null">
-        shop_user_id,
-      </if>
-      <if test="shopDesc != null">
-        shop_desc,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="shopId != null">
-        #{shopId,jdbcType=INTEGER},
-      </if>
-      <if test="shopName != null">
-        #{shopName,jdbcType=VARCHAR},
-      </if>
-      <if test="shopAddr != null">
-        #{shopAddr,jdbcType=VARCHAR},
-      </if>
-      <if test="shopUserId != null">
-        #{shopUserId,jdbcType=INTEGER},
-      </if>
-      <if test="shopDesc != null">
-        #{shopDesc,jdbcType=VARCHAR},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.yunsheng.huiyuanhui.model.Shop">
-    update shop
-    <set>
-      <if test="shopName != null">
-        shop_name = #{shopName,jdbcType=VARCHAR},
-      </if>
-      <if test="shopAddr != null">
-        shop_addr = #{shopAddr,jdbcType=VARCHAR},
-      </if>
-      <if test="shopUserId != null">
-        shop_user_id = #{shopUserId,jdbcType=INTEGER},
-      </if>
-      <if test="shopDesc != null">
-        shop_desc = #{shopDesc,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where shop_id = #{shopId,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.yunsheng.huiyuanhui.model.Shop">
-    update shop
-    set shop_name = #{shopName,jdbcType=VARCHAR},
-      shop_addr = #{shopAddr,jdbcType=VARCHAR},
-      shop_user_id = #{shopUserId,jdbcType=INTEGER},
-      shop_desc = #{shopDesc,jdbcType=VARCHAR}
-    where shop_id = #{shopId,jdbcType=INTEGER}
-  </update>
+    <resultMap id="BaseResultMap" type="com.yunsheng.huiyuanhui.model.Shop">
+        <id column="shop_id" jdbcType="INTEGER" property="shopId"/>
+        <result column="shop_name" jdbcType="VARCHAR" property="shopName"/>
+        <result column="shop_addr" jdbcType="VARCHAR" property="shopAddr"/>
+        <result column="shop_desc" jdbcType="VARCHAR" property="shopDesc"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        shop_id, shop_name, shop_addr, shop_desc
+    </sql>
+    <sql id="Base_Column_List_A">
+        a.shop_id, a.shop_name, a.shop_addr, a.shop_desc
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from shop
+        where shop_id = #{shopId,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        DELETE FROM shop
+        WHERE shop_id = #{shopId,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.yunsheng.huiyuanhui.model.Shop">
+        INSERT INTO shop (shop_id, shop_name, shop_addr, shop_desc)
+        VALUES
+            (#{shopId,jdbcType=INTEGER}, #{shopName,jdbcType=VARCHAR}, #{shopAddr,jdbcType=VARCHAR},
+              #{shopDesc,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="com.yunsheng.huiyuanhui.model.Shop"  useGeneratedKeys="true" keyProperty="shopId" keyColumn="shop_id">
+        insert into shop
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="shopName != null">
+                shop_name,
+            </if>
+            <if test="shopAddr != null">
+                shop_addr,
+            </if>
+            <if test="shopDesc != null">
+                shop_desc,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="shopName != null">
+                #{shopName,jdbcType=VARCHAR},
+            </if>
+            <if test="shopAddr != null">
+                #{shopAddr,jdbcType=VARCHAR},
+            </if>
+            <if test="shopDesc != null">
+                #{shopDesc,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.yunsheng.huiyuanhui.model.Shop">
+        update shop
+        <set>
+            <if test="shopName != null">
+                shop_name = #{shopName,jdbcType=VARCHAR},
+            </if>
+            <if test="shopAddr != null">
+                shop_addr = #{shopAddr,jdbcType=VARCHAR},
+            </if>
+            <if test="shopDesc != null">
+                shop_desc = #{shopDesc,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where shop_id = #{shopId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.yunsheng.huiyuanhui.model.Shop">
+        UPDATE shop
+        SET shop_name    = #{shopName,jdbcType=VARCHAR},
+            shop_addr    = #{shopAddr,jdbcType=VARCHAR},
+            shop_desc    = #{shopDesc,jdbcType=VARCHAR}
+        WHERE shop_id = #{shopId,jdbcType=INTEGER}
+    </update>
+
+    <select id="selectAllShopsOfUser" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List_A"/>
+        from shop a
+        INNER JOIN shop_user_map b
+        on a.shop_id = b.shopId
+        and b.userId = #{userId,jdbcType=INTEGER}
+    </select>
 </mapper>
