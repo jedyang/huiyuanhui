@@ -12,6 +12,8 @@ public interface MemberService {
 
     Member findByOpenId(String openId);
 
+    Member findByMemberId(String memberId);
+
     List<Member>  queryAllMembersOfShop(Integer shopId);
 
 

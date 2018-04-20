@@ -130,7 +130,7 @@
     </update>
     <update id="updateByPrimaryKey" parameterType="com.yunsheng.huiyuanhui.model.Member">
         UPDATE member
-        SET open_id    = #{openId,jdbcType=VARCHAR},
+        SET open_id = #{openId,jdbcType=VARCHAR},
             name    = #{name,jdbcType=VARCHAR},
             phone   = #{phone,jdbcType=VARCHAR},
             passwd  = #{passwd,jdbcType=VARCHAR},
@@ -140,9 +140,9 @@
     </update>
 
     <select id="selectAllMembersOfShop" parameterType="java.lang.Integer"
-            resultType="com.yunsheng.huiyuanhui.model.Member">
+            resultMap="BaseResultMap">
         select
-        <include refid="Base_Column_List"/>
+        <include refid="Base_Column_List_m"/>
         from member m
         INNER JOIN shop_member_map s
         on s.member_id = m.member_id

@@ -38,6 +38,12 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public Member findByMemberId(String memberId) {
+        Member member = memberMapper.selectByPrimaryKey(Integer.parseInt(memberId));
+        return member;
+    }
+
+    @Override
     public List<Member> queryAllMembersOfShop(Integer shopId) {
         List<Member> members = memberMapper.selectAllMembersOfShop(shopId);
         return members;

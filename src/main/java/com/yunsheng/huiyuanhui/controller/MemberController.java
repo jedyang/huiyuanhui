@@ -88,24 +88,16 @@ public class MemberController {
         return result;
     }
 
-    private Member getOneMock(String dd) {
-        Member one = new Member();
-        one.setName(dd);
-        one.setMemberId(Integer.valueOf(new Random().nextInt()));
-        one.setPhone("1234568");
-        return one;
-    }
 
-    @RequestMapping("/{userId}/detail")
+    @RequestMapping("/{memderId}/detail")
     @ResponseBody
-    public Member getMember(@PathVariable String userId) {
+    public Member getMember(@PathVariable String memderId) {
         Member result = new Member();
-        if (StringUtils.isBlank(userId)) {
+        if (StringUtils.isBlank(memderId)) {
             return result;
         }
 
-        // mock
-        Member a = getOneMock("aa");
+        Member a = memberService.findByMemberId(memderId);
 
         return a;
     }
