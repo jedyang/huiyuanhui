@@ -48,4 +48,10 @@ public class MemberServiceImpl implements MemberService {
         List<Member> members = memberMapper.selectAllMembersOfShop(shopId);
         return members;
     }
+
+    @Override
+    public int updateRecord(Member member) {
+        int i = memberMapper.updateByPrimaryKeySelective(member);
+        return i;
+    }
 }

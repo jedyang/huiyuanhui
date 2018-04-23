@@ -2,33 +2,35 @@ package com.yunsheng.huiyuanhui.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.yunsheng.huiyuanhui.dto.MyResult;
+import com.yunsheng.huiyuanhui.model.ConsumeLog;
 import com.yunsheng.huiyuanhui.model.Member;
 import com.yunsheng.huiyuanhui.model.ShopMemberMap;
+import com.yunsheng.huiyuanhui.model.front.ConsumeInfo;
+import com.yunsheng.huiyuanhui.model.front.ReChargeInfo;
+import com.yunsheng.huiyuanhui.service.ConsumeLogService;
 import com.yunsheng.huiyuanhui.service.MemberService;
 import com.yunsheng.huiyuanhui.service.ShopMemberMapService;
 import com.yunsheng.huiyuanhui.util.Constants;
 import com.yunsheng.huiyuanhui.util.HttpUtil;
+import com.yunsheng.huiyuanhui.util.PageRequest;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("/api/member")
@@ -40,6 +42,9 @@ public class MemberController {
 
     @Autowired
     private ShopMemberMapService shopMemberMapService;
+
+    @Autowired
+    private ConsumeLogService consumeLogService;
 
 
     @RequestMapping("/onLogin")
@@ -148,4 +153,187 @@ public class MemberController {
     }
 
 
+    /**
+     * 充值
+     */
+    @PostMapping("/reCharge")
+    @ResponseBody
+    public MyResult modifyMoney(@RequestBody ReChargeInfo reChargeInfo) {
+        MyResult myResult = new MyResult();
+
+        try {
+
+            Member memberById = memberService.findByMemberId(reChargeInfo.getMemberId().toString());
+
+            if (null == memberById) {
+                myResult.setSuccess(false);
+                myResult.setMsg("该会员未注册");
+                return myResult;
+            }
+
+            ShopMemberMap queryParam = new ShopMemberMap();
+            queryParam.setShopId(reChargeInfo.getShopId());
+            queryParam.setMemberId(reChargeInfo.getMemberId());
+            List<ShopMemberMap> shopMemberMaps = shopMemberMapService.findRecord(queryParam);
+            if (null == shopMemberMaps || shopMemberMaps.size() == 0) {
+                myResult.setSuccess(false);
+                myResult.setMsg("该会员不属于该店铺");
+                return myResult;
+            }
+
+            ShopMemberMap shopMemberMap = shopMemberMaps.get(0);
+            // 充值
+            BigDecimal oldMoney = new BigDecimal(shopMemberMap.getMoney());
+            BigDecimal money = new BigDecimal(reChargeInfo.getMoney());
+            BigDecimal newMoney = oldMoney.add(money);
+            shopMemberMap.setMoney(newMoney.doubleValue());
+
+            Integer oldPoint = shopMemberMap.getPoint();
+            Integer point = reChargeInfo.getPoints();
+            Integer newPoint = oldPoint + point;
+            shopMemberMap.setPoint(newPoint);
+
+
+            int updateRecord = shopMemberMapService.updateRecord(shopMemberMap);
+            if (updateRecord == 0) {
+                myResult.setSuccess(false);
+                myResult.setMsg("充值失败");
+                return myResult;
+            }
+
+            // 记录消费历史
+            ConsumeLog log = new ConsumeLog();
+            log.setMemberId(reChargeInfo.getMemberId());
+            log.setShopId(reChargeInfo.getShopId());
+            log.setMoney(money.doubleValue());
+            log.setOldMoney(oldMoney.doubleValue());
+            log.setNewMoney(newMoney.doubleValue());
+            log.setPoints(point);
+            log.setOldPoints(oldPoint);
+            log.setNewPoints(newPoint);
+            log.setType(2);
+            int i = consumeLogService.insertRecord(log);
+            if (i != 1) {
+                logger.error("insert consume log error:" + log.toString());
+            }
+
+            myResult.setSuccess(true);
+            myResult.setMsg("充值成功");
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            myResult.setSuccess(false);
+            myResult.setMsg("充值失败，请重试");
+        }
+
+
+        return myResult;
+    }
+
+    /**
+     * 消费
+     */
+    @PostMapping("/consume")
+    @ResponseBody
+    public MyResult consume(@RequestBody ConsumeInfo consumeInfo) {
+        MyResult myResult = new MyResult();
+        try {
+
+            Member memberById = memberService.findByMemberId(consumeInfo.getMemberId().toString());
+            if (null == memberById) {
+                myResult.setSuccess(false);
+                myResult.setMsg("该会员未注册");
+                return myResult;
+            }
+
+            ShopMemberMap queryParam = new ShopMemberMap();
+            queryParam.setShopId(consumeInfo.getShopId());
+            queryParam.setMemberId(consumeInfo.getMemberId());
+            List<ShopMemberMap> shopMemberMaps = shopMemberMapService.findRecord(queryParam);
+            if (null == shopMemberMaps || shopMemberMaps.size() == 0) {
+                myResult.setSuccess(false);
+                myResult.setMsg("该会员不属于该店铺");
+                return myResult;
+            }
+
+            ShopMemberMap shopMemberMap = shopMemberMaps.get(0);
+            // 消费
+            BigDecimal oldMoney = new BigDecimal(shopMemberMap.getMoney());
+            BigDecimal money = new BigDecimal(consumeInfo.getMoney());
+            BigDecimal subMoney = oldMoney.subtract(money);
+            if (subMoney.compareTo(new BigDecimal(0)) < 0) {
+                myResult.setSuccess(false);
+                myResult.setMsg("余额不足，请充值");
+                return myResult;
+            }
+            shopMemberMap.setMoney(subMoney.doubleValue());
+
+            Integer oldPoint = shopMemberMap.getPoint();
+            Integer point = consumeInfo.getPoints();
+            Integer subPoint = oldPoint - point;
+            if (subPoint < 0) {
+                myResult.setSuccess(false);
+                myResult.setMsg("积分不足，请修改");
+                return myResult;
+            }
+            shopMemberMap.setPoint(subPoint);
+
+
+            int updateRecord = shopMemberMapService.updateRecord(shopMemberMap);
+            if (updateRecord == 0) {
+                myResult.setSuccess(false);
+                myResult.setMsg("消费失败，请重试");
+                return myResult;
+            }
+
+            // 记录消费历史
+            ConsumeLog log = new ConsumeLog();
+            log.setMemberId(consumeInfo.getMemberId());
+            log.setShopId(consumeInfo.getShopId());
+            log.setMoney(money.doubleValue());
+            log.setOldMoney(oldMoney.doubleValue());
+            log.setNewMoney(subMoney.doubleValue());
+            log.setPoints(point);
+            log.setOldPoints(oldPoint);
+            log.setNewPoints(subPoint);
+            log.setType(1);
+            int i = consumeLogService.insertRecord(log);
+            if (i != 1) {
+                logger.error("insert consume log error:" + log.toString());
+            }
+
+            myResult.setSuccess(true);
+            myResult.setMsg("消费成功");
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            myResult.setSuccess(false);
+            myResult.setMsg("消费失败，请重试");
+        }
+
+
+        return myResult;
+    }
+
+    /**
+     * 消费和充值记录查询
+     */
+    @GetMapping("/consumeLogs")
+    @ResponseBody
+    public MyResult<List<ConsumeLog>> getConsumeLog(@RequestParam ConsumeLog consumeLog,
+                                                    @RequestParam(value = "sortBy", required = false) String sortBy,
+                                                    @RequestParam(value = "page", defaultValue = "1", required = false) Integer page,
+                                                    @RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize) {
+
+        MyResult<List<ConsumeLog>> result = new MyResult<>();
+
+        PageRequest<ConsumeLog> pageRequest = new PageRequest<>(page, pageSize);
+
+        PageRequest<ConsumeLog> recordsByPage = consumeLogService.queryRecordsByPage(consumeLog, pageRequest);
+
+        List<ConsumeLog> dataList = recordsByPage.getDataList();
+
+        result.setData(dataList);
+        result.setSuccess(true);
+
+        return result;
+    }
 }

@@ -16,5 +16,7 @@ public interface MemberService {
 
     List<Member>  queryAllMembersOfShop(Integer shopId);
 
+    int updateRecord(Member member);
+
 
 }

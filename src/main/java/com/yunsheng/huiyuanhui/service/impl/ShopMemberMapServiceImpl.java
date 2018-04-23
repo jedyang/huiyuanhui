@@ -22,4 +22,16 @@ public class ShopMemberMapServiceImpl implements ShopMemberMapService {
         return insertSelective;
     }
 
+    @Override
+    public List<ShopMemberMap> findRecord(ShopMemberMap shopMemberMap) {
+        List<ShopMemberMap> shopMemberMaps = shopMemberMapMapper.selectBySelective(shopMemberMap);
+        return shopMemberMaps;
+    }
+
+    @Override
+    public int updateRecord(ShopMemberMap shopMemberMap) {
+        int i = shopMemberMapMapper.updateByPrimaryKeySelective(shopMemberMap);
+        return i;
+    }
+
 }

@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yunsheng.huiyuanhui.mapper.ConsumeLogMapper">
+    <resultMap id="BaseResultMap" type="com.yunsheng.huiyuanhui.model.ConsumeLog">
+        <id column="log_id" property="logId" jdbcType="INTEGER"/>
+        <result column="member_id" property="memberId" jdbcType="INTEGER"/>
+        <result column="shop_id" property="shopId" jdbcType="INTEGER"/>
+        <result column="money" property="money" jdbcType="DOUBLE"/>
+        <result column="old_money" property="oldMoney" jdbcType="DOUBLE"/>
+        <result column="new_money" property="newMoney" jdbcType="DOUBLE"/>
+        <result column="points" property="points" jdbcType="INTEGER"/>
+        <result column="old_points" property="oldPoints" jdbcType="INTEGER"/>
+        <result column="new_points" property="newPoints" jdbcType="INTEGER"/>
+        <result column="type" property="type" jdbcType="INTEGER"/>
+        <result column="log_time" property="logTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        log_id, member_id, shop_id, money, old_money, new_money, points, old_points, new_points,
+        type, log_time
+    </sql>
+    <sql id="query_Where_Clause">
+        <where>
+            <if test="memberId != null">
+                AND member_id = #{memberId,jdbcType=VARCHAR}
+            </if>
+            <if test="shopId != null">
+                AND shop_id = #{shopId,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from consume_log
+        where log_id = #{logId,jdbcType=INTEGER}
+    </select>
+
+    <select id="selectBySelective">
+        select
+        <include refid="Base_Column_List"/>
+        from consume_log
+        <include refid="query_Where_Clause"/>
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        DELETE FROM consume_log
+        WHERE log_id = #{logId,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.yunsheng.huiyuanhui.model.ConsumeLog">
+        INSERT INTO consume_log (log_id, member_id, shop_id,
+                                 money, old_money, new_money,
+                                 points, old_points, new_points,
+                                 type, log_time)
+        VALUES (#{logId,jdbcType=INTEGER}, #{memberId,jdbcType=INTEGER}, #{shopId,jdbcType=INTEGER},
+                                           #{money,jdbcType=DOUBLE}, #{oldMoney,jdbcType=DOUBLE},
+                                           #{newMoney,jdbcType=DOUBLE},
+                                           #{points,jdbcType=INTEGER},
+                                           #{oldPoints,jdbcType=INTEGER},
+                                           #{newPoints,jdbcType=INTEGER},
+                                           #{type,jdbcType=INTEGER}, #{logTime,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" parameterType="com.yunsheng.huiyuanhui.model.ConsumeLog">
+        insert into consume_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="logId != null">
+                log_id,
+            </if>
+            <if test="memberId != null">
+                member_id,
+            </if>
+            <if test="shopId != null">
+                shop_id,
+            </if>
+            <if test="money != null">
+                money,
+            </if>
+            <if test="oldMoney != null">
+                old_money,
+            </if>
+            <if test="newMoney != null">
+                new_money,
+            </if>
+            <if test="points != null">
+                points,
+            </if>
+            <if test="oldPoints != null">
+                old_points,
+            </if>
+            <if test="newPoints != null">
+                new_points,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+            <if test="logTime != null">
+                log_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="logId != null">
+                #{logId,jdbcType=INTEGER},
+            </if>
+            <if test="memberId != null">
+                #{memberId,jdbcType=INTEGER},
+            </if>
+            <if test="shopId != null">
+                #{shopId,jdbcType=INTEGER},
+            </if>
+            <if test="money != null">
+                #{money,jdbcType=DOUBLE},
+            </if>
+            <if test="oldMoney != null">
+                #{oldMoney,jdbcType=DOUBLE},
+            </if>
+            <if test="newMoney != null">
+                #{newMoney,jdbcType=DOUBLE},
+            </if>
+            <if test="points != null">
+                #{points,jdbcType=INTEGER},
+            </if>
+            <if test="oldPoints != null">
+                #{oldPoints,jdbcType=INTEGER},
+            </if>
+            <if test="newPoints != null">
+                #{newPoints,jdbcType=INTEGER},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=INTEGER},
+            </if>
+            <if test="logTime != null">
+                #{logTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective"
+            parameterType="com.yunsheng.huiyuanhui.model.ConsumeLog">
+        update consume_log
+        <set>
+            <if test="memberId != null">
+                member_id = #{memberId,jdbcType=INTEGER},
+            </if>
+            <if test="shopId != null">
+                shop_id = #{shopId,jdbcType=INTEGER},
+            </if>
+            <if test="money != null">
+                money = #{money,jdbcType=DOUBLE},
+            </if>
+            <if test="oldMoney != null">
+                old_money = #{oldMoney,jdbcType=DOUBLE},
+            </if>
+            <if test="newMoney != null">
+                new_money = #{newMoney,jdbcType=DOUBLE},
+            </if>
+            <if test="points != null">
+                points = #{points,jdbcType=INTEGER},
+            </if>
+            <if test="oldPoints != null">
+                old_points = #{oldPoints,jdbcType=INTEGER},
+            </if>
+            <if test="newPoints != null">
+                new_points = #{newPoints,jdbcType=INTEGER},
+            </if>
+            <if test="type != null">
+                type = #{type,jdbcType=INTEGER},
+            </if>
+            <if test="logTime != null">
+                log_time = #{logTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where log_id = #{logId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.yunsheng.huiyuanhui.model.ConsumeLog">
+        UPDATE consume_log
+        SET member_id  = #{memberId,jdbcType=INTEGER},
+            shop_id    = #{shopId,jdbcType=INTEGER},
+            money      = #{money,jdbcType=DOUBLE},
+            old_money  = #{oldMoney,jdbcType=DOUBLE},
+            new_money  = #{newMoney,jdbcType=DOUBLE},
+            points     = #{points,jdbcType=INTEGER},
+            old_points = #{oldPoints,jdbcType=INTEGER},
+            new_points = #{newPoints,jdbcType=INTEGER},
+            type       = #{type,jdbcType=INTEGER},
+            log_time   = #{logTime,jdbcType=TIMESTAMP}
+        WHERE log_id = #{logId,jdbcType=INTEGER}
+    </update>
+</mapper>
