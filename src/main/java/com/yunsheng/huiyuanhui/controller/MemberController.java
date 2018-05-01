@@ -76,18 +76,20 @@ public class MemberController {
     /**
      * 查询该店铺下所有会员
      */
-    @RequestMapping("/{shopId}/allMember")
+    @RequestMapping("/allMember")
     @ResponseBody
-    public MyResult<List<Member>> getAllMember(@PathVariable String shopId) {
+    public MyResult<List<ShopMemberMap>> getAllMember(@RequestParam(name = "shopId") String shopId, @RequestParam(name = "words") String words) {
         MyResult result = new MyResult();
 
         if (StringUtils.isBlank(shopId)) {
             return result;
         }
 
-        List<Member> members = memberService.queryAllMembersOfShop(Integer.parseInt(shopId));
+        ShopMemberMap shopMemberMap = new ShopMemberMap();
+        shopMemberMap.setShopId(Integer.parseInt(shopId));
+        List<ShopMemberMap> record = shopMemberMapService.findRecord(shopMemberMap);
 
-        result.setData(members);
+        result.setData(record);
         result.setSuccess(true);
 
         return result;
