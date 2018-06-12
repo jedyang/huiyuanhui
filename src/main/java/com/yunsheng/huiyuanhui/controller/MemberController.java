@@ -68,6 +68,12 @@ public class MemberController {
         auth.put("loginSessionKey", openId);
         // 将sessionkey对应生成第三方session，存到redis。用于交互
 
+        // 查询memberId
+        Member byOpenId = memberService.findByOpenId(openId);
+        if (null != byOpenId) {
+            auth.put("memberId", byOpenId.getMemberId().toString());
+        }
+
         result.setSuccess(true);
         result.setData(auth);
         return result;
