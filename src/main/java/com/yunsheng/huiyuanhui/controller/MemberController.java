@@ -5,11 +5,13 @@ import com.yunsheng.huiyuanhui.dto.MyResult;
 import com.yunsheng.huiyuanhui.model.ConsumeLog;
 import com.yunsheng.huiyuanhui.model.Member;
 import com.yunsheng.huiyuanhui.model.ShopMemberMap;
+import com.yunsheng.huiyuanhui.model.ShopUser;
 import com.yunsheng.huiyuanhui.model.front.ConsumeInfo;
 import com.yunsheng.huiyuanhui.model.front.ReChargeInfo;
 import com.yunsheng.huiyuanhui.service.ConsumeLogService;
 import com.yunsheng.huiyuanhui.service.MemberService;
 import com.yunsheng.huiyuanhui.service.ShopMemberMapService;
+import com.yunsheng.huiyuanhui.service.ShopUserService;
 import com.yunsheng.huiyuanhui.util.Constants;
 import com.yunsheng.huiyuanhui.util.HttpUtil;
 import com.yunsheng.huiyuanhui.util.PageRequest;
@@ -32,6 +34,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 会员controller
+ */
+
 @RestController
 @RequestMapping("/api/member")
 public class MemberController {
@@ -45,6 +51,9 @@ public class MemberController {
 
     @Autowired
     private ConsumeLogService consumeLogService;
+
+    @Autowired
+    private ShopUserService shopUserService;
 
 
     @RequestMapping("/onLogin")
@@ -69,6 +78,12 @@ public class MemberController {
         // 将sessionkey对应生成第三方session，存到redis。用于交互
 
         // 查询memberId
+        // 先去店主表查
+        ShopUser shopUser = shopUserService.findByOpenId(openId);
+        if (null != shopUser){
+            auth.put("shopUserId", shopUser.getUserId().toString());
+        }
+        // 去会员表查
         Member byOpenId = memberService.findByOpenId(openId);
         if (null != byOpenId) {
             auth.put("memberId", byOpenId.getMemberId().toString());

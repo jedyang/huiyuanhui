@@ -85,6 +85,7 @@ public class ShopController {
 
         result.setData(allShopsOfUser);
         result.setSuccess(true);
+        result.setMsg("查询店铺信息成功");
         return result;
 
     }
