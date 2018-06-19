@@ -98,4 +98,25 @@ public class ShopController {
         return accessToken;
     }
 
+    /**
+     * 给店铺添加用户 一个店铺可以有多个用户管理
+     */
+    @PostMapping("/addShopUser")
+    @ResponseBody
+    public MyResult addShopUser(@RequestBody ShopInfo shopInfo) {
+        logger.info(shopInfo.toString());
+        MyResult result = new MyResult();
+
+
+        Integer shopId = shopInfo.getShopId();
+        // 存店铺和user的对应关系，支持多对多
+        ShopUserMap shopUserMap = new ShopUserMap();
+        shopUserMap.setShopid(shopId);
+        shopUserMap.setUserid(shopInfo.getUserId());
+        shopUserMapService.insertRecord(shopUserMap);
+
+
+        result.setSuccess(true);
+        return result;
+    }
 }
