@@ -1,16 +1,16 @@
 package com.yunsheng.huiyuanhui.dto;
 
 public class MyResult<T> {
-    T data;
+    T result;
     boolean success;
     String msg;
 
-    public T getData() {
-        return data;
+    public T getResult() {
+        return result;
     }
 
-    public void setData(T data) {
-        this.data = data;
+    public void setResult(T result) {
+        this.result = result;
     }
 
     public boolean isSuccess() {

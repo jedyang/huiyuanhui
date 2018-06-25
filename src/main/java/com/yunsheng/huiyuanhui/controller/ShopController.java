@@ -83,7 +83,7 @@ public class ShopController {
 
         List<Shop> allShopsOfUser = shopService.findAllShopsOfUser(userId);
 
-        result.setData(allShopsOfUser);
+        result.setResult(allShopsOfUser);
         result.setSuccess(true);
         result.setMsg("查询店铺信息成功");
         return result;

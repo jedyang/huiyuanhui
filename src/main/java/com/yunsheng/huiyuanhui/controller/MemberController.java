@@ -90,7 +90,7 @@ public class MemberController {
         }
 
         result.setSuccess(true);
-        result.setData(auth);
+        result.setResult(auth);
         return result;
     }
 
@@ -110,7 +110,7 @@ public class MemberController {
         shopMemberMap.setShopId(Integer.parseInt(shopId));
         List<ShopMemberMap> record = shopMemberMapService.findRecord(shopMemberMap);
 
-        result.setData(record);
+        result.setResult(record);
         result.setSuccess(true);
 
         return result;
@@ -354,7 +354,7 @@ public class MemberController {
 
         List<ConsumeLog> dataList = recordsByPage.getDataList();
 
-        result.setData(dataList);
+        result.setResult(dataList);
         result.setSuccess(true);
 
         return result;
