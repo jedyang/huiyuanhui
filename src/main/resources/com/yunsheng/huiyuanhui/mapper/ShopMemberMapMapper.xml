@@ -128,7 +128,7 @@
     </update>
 
 
-    <select id="selectBySelective">
+    <select id="selectBySelective" parameterType="com.yunsheng.huiyuanhui.model.ShopMemberMap" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from shop_member_map

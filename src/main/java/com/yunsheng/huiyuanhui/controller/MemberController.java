@@ -99,7 +99,8 @@ public class MemberController {
      */
     @RequestMapping("/allMember")
     @ResponseBody
-    public MyResult<List<ShopMemberMap>> getAllMember(@RequestParam(name = "shopId") String shopId, @RequestParam(name = "words") String words) {
+    public MyResult<List<ShopMemberMap>> getAllMember(@RequestParam(name = "shopId") String shopId,
+                                                      @RequestParam(name = "words", required = false) String words) {
         MyResult result = new MyResult();
 
         if (StringUtils.isBlank(shopId)) {
