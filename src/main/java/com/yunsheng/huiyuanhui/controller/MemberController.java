@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -109,8 +110,15 @@ public class MemberController {
 
         ShopMemberMap shopMemberMap = new ShopMemberMap();
         shopMemberMap.setShopId(Integer.parseInt(shopId));
-        List<ShopMemberMap> record = shopMemberMapService.findRecord(shopMemberMap);
+        List<ShopMemberMap> records = shopMemberMapService.findRecord(shopMemberMap);
 
+        List<Member> record = new ArrayList<>();
+        if(null != records && !records.isEmpty()){
+            for (ShopMemberMap i : records){
+                Member byMemberId = memberService.findByMemberId(i.getMemberId().toString());
+                record.add(byMemberId);
+            }
+        }
         result.setResult(record);
         result.setSuccess(true);
 
@@ -118,15 +126,15 @@ public class MemberController {
     }
 
 
-    @RequestMapping("/{memderId}/detail")
+    @RequestMapping("/detail")
     @ResponseBody
-    public Member getMember(@PathVariable String memderId) {
+    public Member getMember(@RequestParam(name = "memberId") String memberId) {
         Member result = new Member();
-        if (StringUtils.isBlank(memderId)) {
+        if (StringUtils.isBlank(memberId)) {
             return result;
         }
 
-        Member a = memberService.findByMemberId(memderId);
+        Member a = memberService.findByMemberId(memberId);
 
         return a;
     }
