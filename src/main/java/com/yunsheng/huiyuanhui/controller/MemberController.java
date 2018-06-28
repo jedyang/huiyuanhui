@@ -128,15 +128,16 @@ public class MemberController {
 
     @RequestMapping("/detail")
     @ResponseBody
-    public Member getMember(@RequestParam(name = "memberId") String memberId) {
-        Member result = new Member();
+    public MyResult getMember(@RequestParam(name = "memberId") String memberId) {
+        MyResult result = new MyResult();
         if (StringUtils.isBlank(memberId)) {
             return result;
         }
 
         Member a = memberService.findByMemberId(memberId);
-
-        return a;
+        result.setSuccess(true);
+        result.setResult(a);
+        return result;
     }
 
     @RequestMapping("/{userId}/status")
