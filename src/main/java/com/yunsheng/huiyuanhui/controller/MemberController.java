@@ -81,7 +81,7 @@ public class MemberController {
         // 查询memberId
         // 先去店主表查
         ShopUser shopUser = shopUserService.findByOpenId(openId);
-        if (null != shopUser){
+        if (null != shopUser) {
             auth.put("shopUserId", shopUser.getUserId().toString());
         }
         // 去会员表查
@@ -113,8 +113,8 @@ public class MemberController {
         List<ShopMemberMap> records = shopMemberMapService.findRecord(shopMemberMap);
 
         List<Member> record = new ArrayList<>();
-        if(null != records && !records.isEmpty()){
-            for (ShopMemberMap i : records){
+        if (null != records && !records.isEmpty()) {
+            for (ShopMemberMap i : records) {
                 Member byMemberId = memberService.findByMemberId(i.getMemberId().toString());
                 record.add(byMemberId);
             }
@@ -126,7 +126,7 @@ public class MemberController {
     }
 
 
-    @RequestMapping("/detail")
+    @GetMapping("/detail")
     @ResponseBody
     public MyResult getMember(@RequestParam(name = "memberId") String memberId) {
         MyResult result = new MyResult();
@@ -137,6 +137,19 @@ public class MemberController {
         Member a = memberService.findByMemberId(memberId);
         result.setSuccess(true);
         result.setResult(a);
+        return result;
+    }
+
+    @GetMapping("/consumeList")
+    @ResponseBody
+    public MyResult consumeList(@RequestParam(name = "memberId") String memberId, @RequestParam(name = "shopId") String shopId) {
+        MyResult result = new MyResult();
+        if (StringUtils.isBlank(memberId)) {
+            return result;
+        }
+// TODO
+        result.setSuccess(true);
+        result.setResult("");
         return result;
     }
 
