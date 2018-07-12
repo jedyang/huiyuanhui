@@ -25,6 +25,9 @@ public class ConsumeLog {
 
     private Integer type;
 
+    // 前台使用
+    private String typeName;
+
     private Date logTime;
 
     public Integer getLogId() {
@@ -113,6 +116,23 @@ public class ConsumeLog {
 
     public void setLogTime(Date logTime) {
         this.logTime = logTime;
+    }
+
+    // 类型：1，消费；2，充值；3，奖励
+    public String getTypeName() {
+        String name = "";
+        switch (this.getType()) {
+            case 1:
+                name = "消费";
+                break;
+            case 2:
+                name = "充值";
+                break;
+            case 3:
+                name = "奖励";
+                break;
+        }
+        return name;
     }
 
 

@@ -140,25 +140,6 @@ public class MemberController {
         return result;
     }
 
-    @GetMapping("/consumeList")
-    @ResponseBody
-    public MyResult consumeList(@RequestParam(name = "memberId") String memberId, @RequestParam(name = "shopId") String shopId) {
-        MyResult result = new MyResult();
-        if (StringUtils.isBlank(memberId)) {
-            return result;
-        }
-// TODO
-        result.setSuccess(true);
-        result.setResult("");
-        return result;
-    }
-
-    @RequestMapping("/{userId}/status")
-    @ResponseBody
-    public String getMemberStaus(@PathVariable String userId) {
-
-        return "ok";
-    }
 
     /**
      * 新增用户可能通过商家的二维码进来 或者推广的平台二维码
