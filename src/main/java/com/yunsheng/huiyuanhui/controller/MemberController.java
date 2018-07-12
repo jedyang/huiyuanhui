@@ -345,7 +345,8 @@ public class MemberController {
      */
     @GetMapping("/consumeLogs")
     @ResponseBody
-    public MyResult<List<ConsumeLog>> getConsumeLog(@RequestParam ConsumeLog consumeLog,
+    public MyResult<List<ConsumeLog>> getConsumeLog(@RequestParam String memberId,
+                                                    @RequestParam String shopId,
                                                     @RequestParam(value = "sortBy", required = false) String sortBy,
                                                     @RequestParam(value = "page", defaultValue = "1", required = false) Integer page,
                                                     @RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize) {
@@ -354,6 +355,9 @@ public class MemberController {
 
         PageRequest<ConsumeLog> pageRequest = new PageRequest<>(page, pageSize);
 
+        ConsumeLog consumeLog = new ConsumeLog();
+        consumeLog.setMemberId(Integer.parseInt(memberId));
+        consumeLog.setShopId(Integer.parseInt(shopId));
         PageRequest<ConsumeLog> recordsByPage = consumeLogService.queryRecordsByPage(consumeLog, pageRequest);
 
         List<ConsumeLog> dataList = recordsByPage.getDataList();

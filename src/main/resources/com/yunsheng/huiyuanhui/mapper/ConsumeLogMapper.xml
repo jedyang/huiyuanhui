@@ -36,7 +36,7 @@
         where log_id = #{logId,jdbcType=INTEGER}
     </select>
 
-    <select id="selectBySelective">
+    <select id="selectBySelective" resultMap="BaseResultMap" parameterType="com.yunsheng.huiyuanhui.model.ConsumeLog">
         select
         <include refid="Base_Column_List"/>
         from consume_log
