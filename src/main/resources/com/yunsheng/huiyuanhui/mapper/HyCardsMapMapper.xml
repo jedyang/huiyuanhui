@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yunsheng.huiyuanhui.mapper.HyCardsMapMapper" >
+  <resultMap id="BaseResultMap" type="com.yunsheng.huiyuanhui.model.HyCardsMap" >
+    <id column="card_id" property="cardId" jdbcType="BIGINT" />
+    <result column="member_id" property="memberId" jdbcType="INTEGER" />
+    <result column="shop_id" property="shopId" jdbcType="INTEGER" />
+    <result column="remain" property="remain" jdbcType="INTEGER" />
+    <result column="points" property="points" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    card_id, member_id, shop_id, remain, points, create_time, state
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from hy_cards
+    where card_id = #{cardId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from hy_cards
+    where card_id = #{cardId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.yunsheng.huiyuanhui.model.HyCardsMap" >
+    insert into hy_cards (card_id, member_id, shop_id, 
+      remain, points, create_time, 
+      state)
+    values (#{cardId,jdbcType=BIGINT}, #{memberId,jdbcType=INTEGER}, #{shopId,jdbcType=INTEGER}, 
+      #{remain,jdbcType=INTEGER}, #{points,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{state,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yunsheng.huiyuanhui.model.HyCardsMap" >
+    insert into hy_cards
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="cardId != null" >
+        card_id,
+      </if>
+      <if test="memberId != null" >
+        member_id,
+      </if>
+      <if test="shopId != null" >
+        shop_id,
+      </if>
+      <if test="remain != null" >
+        remain,
+      </if>
+      <if test="points != null" >
+        points,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="state != null" >
+        state,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="cardId != null" >
+        #{cardId,jdbcType=BIGINT},
+      </if>
+      <if test="memberId != null" >
+        #{memberId,jdbcType=INTEGER},
+      </if>
+      <if test="shopId != null" >
+        #{shopId,jdbcType=INTEGER},
+      </if>
+      <if test="remain != null" >
+        #{remain,jdbcType=INTEGER},
+      </if>
+      <if test="points != null" >
+        #{points,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yunsheng.huiyuanhui.model.HyCardsMap" >
+    update hy_cards
+    <set >
+      <if test="memberId != null" >
+        member_id = #{memberId,jdbcType=INTEGER},
+      </if>
+      <if test="shopId != null" >
+        shop_id = #{shopId,jdbcType=INTEGER},
+      </if>
+      <if test="remain != null" >
+        remain = #{remain,jdbcType=INTEGER},
+      </if>
+      <if test="points != null" >
+        points = #{points,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null" >
+        state = #{state,jdbcType=INTEGER},
+      </if>
+    </set>
+    where card_id = #{cardId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yunsheng.huiyuanhui.model.HyCardsMap" >
+    update hy_cards
+    set member_id = #{memberId,jdbcType=INTEGER},
+      shop_id = #{shopId,jdbcType=INTEGER},
+      remain = #{remain,jdbcType=INTEGER},
+      points = #{points,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      state = #{state,jdbcType=INTEGER}
+    where card_id = #{cardId,jdbcType=BIGINT}
+  </update>
+</mapper>
