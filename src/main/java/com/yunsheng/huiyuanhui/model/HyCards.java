@@ -2,7 +2,7 @@ package com.yunsheng.huiyuanhui.model;
 
 import java.util.Date;
 
-public class HyCardsMap {
+public class HyCards {
     private Long cardId;
 
     private Integer memberId;

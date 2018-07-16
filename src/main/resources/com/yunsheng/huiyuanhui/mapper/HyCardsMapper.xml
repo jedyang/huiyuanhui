@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.yunsheng.huiyuanhui.mapper.HyCardsMapMapper" >
-  <resultMap id="BaseResultMap" type="com.yunsheng.huiyuanhui.model.HyCardsMap" >
+<mapper namespace="com.yunsheng.huiyuanhui.mapper.HyCardsMapper" >
+  <resultMap id="BaseResultMap" type="com.yunsheng.huiyuanhui.model.HyCards" >
     <id column="card_id" property="cardId" jdbcType="BIGINT" />
     <result column="member_id" property="memberId" jdbcType="INTEGER" />
     <result column="shop_id" property="shopId" jdbcType="INTEGER" />
@@ -13,6 +13,22 @@
   <sql id="Base_Column_List" >
     card_id, member_id, shop_id, remain, points, create_time, state
   </sql>
+  <sql id="query_Where_Clause" >
+    <where>
+      <if test="cardId != null and cardId != ''">
+        AND card_id = #{cardId}
+      </if>
+      <if test="memberId != null and memberId != ''">
+        AND member_id = #{memberId}
+      </if>
+      <if test="shopId != null and shopId != ''">
+        AND shop_id = #{shopId}
+      </if>
+      <if test="state != null and state != ''">
+        AND state = #{state}
+      </if>
+    </where>
+  </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
     <include refid="Base_Column_List" />
@@ -23,7 +39,7 @@
     delete from hy_cards
     where card_id = #{cardId,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.yunsheng.huiyuanhui.model.HyCardsMap" >
+  <insert id="insert" parameterType="com.yunsheng.huiyuanhui.model.HyCards" >
     insert into hy_cards (card_id, member_id, shop_id, 
       remain, points, create_time, 
       state)
@@ -31,7 +47,7 @@
       #{remain,jdbcType=INTEGER}, #{points,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
       #{state,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="com.yunsheng.huiyuanhui.model.HyCardsMap" >
+  <insert id="insertSelective" parameterType="com.yunsheng.huiyuanhui.model.HyCards" >
     insert into hy_cards
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="cardId != null" >
@@ -80,7 +96,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.yunsheng.huiyuanhui.model.HyCardsMap" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.yunsheng.huiyuanhui.model.HyCards" >
     update hy_cards
     <set >
       <if test="memberId != null" >
@@ -104,7 +120,7 @@
     </set>
     where card_id = #{cardId,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.yunsheng.huiyuanhui.model.HyCardsMap" >
+  <update id="updateByPrimaryKey" parameterType="com.yunsheng.huiyuanhui.model.HyCards" >
     update hy_cards
     set member_id = #{memberId,jdbcType=INTEGER},
       shop_id = #{shopId,jdbcType=INTEGER},
@@ -114,4 +130,12 @@
       state = #{state,jdbcType=INTEGER}
     where card_id = #{cardId,jdbcType=BIGINT}
   </update>
+
+  <select id="selectListByPage" resultMap="BaseResultMap"
+          parameterType="com.yunsheng.huiyuanhui.model.HyCards">
+    select
+    <include refid="Base_Column_List"/>
+    from ec_goods
+    <include refid="query_Where_Clause"/>
+  </select>
 </mapper>
