@@ -67,6 +67,8 @@ public class ShopController {
             shopUserMap.setUserid(userByOpenId.getUserId());
             shopUserMapService.insertRecord(shopUserMap);
 
+            // 为店铺生成二维码
+
         }
 
         result.setSuccess(true);

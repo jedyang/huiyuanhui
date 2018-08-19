@@ -8,4 +8,5 @@ public class Constants {
 
     public static final String ACCESS_TOKEN_URL = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" + APPID + "&secret=" + APPSECRET;
 
+    public static final String WX_QRCODE_URL = "https://api.weixin.qq.com/wxa/getwxacodeunlimit";
 }
