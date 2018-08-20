@@ -9,9 +9,9 @@ import org.springframework.stereotype.Component;
 public class WeiXinUtil {
     private AccessTokenKeep keep = new AccessTokenKeep();
 
-    public String getAccessToken() {
+    public  String getAccessToken() {
         // {"access_token":"8_rXLd8cv-Zsv6fltl7-dVGLv5JoE3jjM2DazBdEmez2aMi_7KY8YZGaYceV9IGtxRL4YPmCwiS3uoH8nSYnnb5Gs-DYiQawxHgCUhdpoujs6WTtlMG4RgDKB0gtFwvM5if7xxA83x9ubjN8K9UWHeAAACEP","expires_in":7200}
-        String accessToken = this.keep.getAccessToken();
+        String accessToken = keep.getAccessToken();
         if (StringUtils.isBlank(accessToken)) {
             accessToken = getAndUpdate();
 
@@ -28,7 +28,7 @@ public class WeiXinUtil {
         return accessToken;
     }
 
-    private String getAndUpdate() {
+    private  String getAndUpdate() {
         String accessToken = HttpUtil.sendGet(Constants.ACCESS_TOKEN_URL);
         JSONObject jsonObject = JSONObject.parseObject(accessToken);
         String accessTokenValue = jsonObject.getString("access_token");
@@ -43,7 +43,7 @@ public class WeiXinUtil {
     // 生成小程序码
     public String getQRCode() {
         String result = "";
-        String token = getAccessToken();
+        String token = this.getAccessToken();
         String url = Constants.WX_QRCODE_URL + "?access_token=" + token;
         String params = "{'path':'pages/index/index'}";
         HttpUtil.sendPost(url, params);

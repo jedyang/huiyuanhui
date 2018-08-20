@@ -68,6 +68,7 @@ public class ShopController {
             shopUserMapService.insertRecord(shopUserMap);
 
             // 为店铺生成二维码
+//            WeiXinUtil
 
         }
 
