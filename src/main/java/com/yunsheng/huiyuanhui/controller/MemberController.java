@@ -98,6 +98,7 @@ public class MemberController {
     /**
      * 查询该店铺下所有会员
      */
+    // TODO 会员过滤
     @RequestMapping("/allMember")
     @ResponseBody
     public MyResult<List<ShopMemberMap>> getAllMember(@RequestParam(name = "shopId") String shopId,
