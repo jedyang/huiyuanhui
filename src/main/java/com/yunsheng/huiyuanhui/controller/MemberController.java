@@ -98,29 +98,20 @@ public class MemberController {
     /**
      * 查询该店铺下所有会员
      */
-    // TODO 会员过滤
     @RequestMapping("/allMember")
     @ResponseBody
-    public MyResult<List<ShopMemberMap>> getAllMember(@RequestParam(name = "shopId") String shopId,
-                                                      @RequestParam(name = "words", required = false) String words) {
+    public MyResult getAllMember(@RequestParam(name = "shopId") Integer shopId,
+                                 @RequestParam(name = "words", required = false) String words) {
         MyResult result = new MyResult();
 
-        if (StringUtils.isBlank(shopId)) {
-            return result;
+        List<Member> members = new ArrayList<>();
+        if (StringUtils.isBlank(words)) {
+            members = memberService.queryAllMembersOfShop(shopId);
+        } else {
+            members = memberService.queryAllMembersByShopAndKeyWord(shopId, words);
         }
 
-        ShopMemberMap shopMemberMap = new ShopMemberMap();
-        shopMemberMap.setShopId(Integer.parseInt(shopId));
-        List<ShopMemberMap> records = shopMemberMapService.findRecord(shopMemberMap);
-
-        List<Member> record = new ArrayList<>();
-        if (null != records && !records.isEmpty()) {
-            for (ShopMemberMap i : records) {
-                Member byMemberId = memberService.findByMemberId(i.getMemberId().toString());
-                record.add(byMemberId);
-            }
-        }
-        result.setResult(record);
+        result.setResult(members);
         result.setSuccess(true);
 
         return result;

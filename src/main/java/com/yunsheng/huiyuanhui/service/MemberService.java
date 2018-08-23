@@ -16,6 +16,9 @@ public interface MemberService {
 
     List<Member>  queryAllMembersOfShop(Integer shopId);
 
+    // 查询该店铺下所有会员，且加上关键字过滤
+    List<Member>  queryAllMembersByShopAndKeyWord(Integer shopId, String keyword);
+
     int updateRecord(Member member);
 
 

@@ -2,6 +2,7 @@ package com.yunsheng.huiyuanhui.mapper;
 
 import com.yunsheng.huiyuanhui.model.Member;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -23,4 +24,6 @@ public interface MemberMapper {
     int updateByPrimaryKey(Member record);
 
     List<Member> selectAllMembersOfShop(Integer shopId);
+
+    List<Member> queryAllMembersByShopAndKeyWord(@Param("shopId") Integer shopId, @Param("keyword") String keyword);
 }

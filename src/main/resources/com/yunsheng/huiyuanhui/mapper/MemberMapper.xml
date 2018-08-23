@@ -148,4 +148,15 @@
         on s.member_id = m.member_id
         and s.shop_id = #{shopId,jdbcType=INTEGER};
     </select>
+
+    <select id="queryAllMembersByShopAndKeyWord"
+            resultMap="BaseResultMap">
+        <bind name="pattern" value="'%' + keyword + '%'" />
+        SELECT <include refid="Base_Column_List_m"/>
+        from member m
+        WHERE m.member_id in (SELECT smm.member_id FROM shop_member_map smm where smm.shop_id = #{shopId})
+        AND (m.phone LIKE #{pattern}
+        OR m.name LIKE #{pattern})
+
+    </select>
 </mapper>

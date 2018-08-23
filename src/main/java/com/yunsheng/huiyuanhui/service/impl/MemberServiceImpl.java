@@ -50,6 +50,12 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public List<Member> queryAllMembersByShopAndKeyWord(Integer shopId, String keyword) {
+        List<Member> members = memberMapper.queryAllMembersByShopAndKeyWord(shopId, keyword);
+        return members;
+    }
+
+    @Override
     public int updateRecord(Member member) {
         int i = memberMapper.updateByPrimaryKeySelective(member);
         return i;
