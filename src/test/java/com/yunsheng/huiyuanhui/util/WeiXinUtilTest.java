@@ -7,8 +7,13 @@ import static org.junit.Assert.*;
 public class WeiXinUtilTest {
     @Test
     public void getAccessToken() throws Exception {
-        String accessToken = new WeiXinUtil().getAccessToken();
+        String accessToken =  WeiXinUtil.getAccessToken();
         System.out.println(accessToken);
     }
 
+    @Test
+    public void getQrCode() throws Exception {
+        String accessToken =  WeiXinUtil.getQRCode("123");
+        System.out.println(accessToken);
+    }
 }

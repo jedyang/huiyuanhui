@@ -19,6 +19,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
+
 @RestController
 @RequestMapping("/api/shop")
 public class ShopController {
@@ -34,8 +36,6 @@ public class ShopController {
     @Autowired
     private ShopUserMapService shopUserMapService;
 
-    @Autowired
-    private WeiXinUtil weiXinUtil;
 
     @PostMapping("/add")
     @ResponseBody
@@ -68,7 +68,7 @@ public class ShopController {
             shopUserMapService.insertRecord(shopUserMap);
 
             // 为店铺生成二维码
-//            WeiXinUtil
+//            String qrCodeUrl = WeiXinUtil.getQRCode(shopId.toString());
 
         }
 
@@ -97,9 +97,16 @@ public class ShopController {
     @ResponseBody
     public String getAccessToken() {
         logger.info("===getAccessToken===");
-        String accessToken = weiXinUtil.getAccessToken();
+        String accessToken = WeiXinUtil.getAccessToken();
         return accessToken;
     }
+
+//    @GetMapping("/getQrcode")
+//    @ResponseBody
+//    public void getQrCode(String shopId, HttpServletResponse response) {
+//        logger.info("===getAccessToken===");
+//        String accessToken = WeiXinUtil.getAccessToken();
+//    }
 
     /**
      * 给店铺添加用户 一个店铺可以有多个用户管理
