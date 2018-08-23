@@ -13,7 +13,7 @@ public class Constants {
 
     // 七牛
     public final static String ACCESSKEY = "nv1fFv6J_ZfN5ZosACjD50X87SsxII4C2J1LZSIB";
-    public final static String SECRETKEY = "nv1fFv6J_ZfN5ZosACjD50X87SsxII4C2J1LZSIB";
+    public final static String SECRETKEY = "xV3TcN84L8tW_Pe3PtlB51BR0R4MTfM33rLrBEu7";
     public final static String URL_DOMAIN = "http://pdumzxy0c.bkt.clouddn.com/";
     public final static String BUCKET = "ihuiyuan";
 }

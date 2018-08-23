@@ -10,6 +10,7 @@ public class ShopInfo extends Shop {
 
     private Integer userId;
 
+
     public String getOpenId() {
         return openId;
     }
@@ -25,6 +26,8 @@ public class ShopInfo extends Shop {
     public void setUserId(Integer userId) {
         this.userId = userId;
     }
+
+
 
     @Override
     public String toString() {

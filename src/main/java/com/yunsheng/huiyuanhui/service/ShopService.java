@@ -8,4 +8,6 @@ public interface ShopService {
     Integer insertShop(Shop shop);
 
     List<Shop> findAllShopsOfUser(Integer userId);
+
+    Shop findShopByPk(Integer shopId);
 }

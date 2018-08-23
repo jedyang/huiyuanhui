@@ -9,6 +9,8 @@ public class Shop {
 
     private String shopDesc;
 
+    private String invitePicUrl;
+
     public Integer getShopId() {
         return shopId;
     }
@@ -39,6 +41,14 @@ public class Shop {
 
     public void setShopDesc(String shopDesc) {
         this.shopDesc = shopDesc == null ? null : shopDesc.trim();
+    }
+
+    public String getInvitePicUrl() {
+        return invitePicUrl;
+    }
+
+    public void setInvitePicUrl(String invitePicUrl) {
+        this.invitePicUrl = invitePicUrl;
     }
 
     @Override

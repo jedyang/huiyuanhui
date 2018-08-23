@@ -26,4 +26,10 @@ public class ShopServiceImpl implements ShopService {
         List<Shop> shops = shopMapper.selectAllShopsOfUser(userId);
         return shops;
     }
+
+    @Override
+    public Shop findShopByPk(Integer shopId) {
+        Shop shop = shopMapper.selectByPrimaryKey(shopId);
+        return shop;
+    }
 }

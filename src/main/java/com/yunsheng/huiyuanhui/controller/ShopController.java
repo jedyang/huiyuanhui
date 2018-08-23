@@ -8,6 +8,7 @@ import com.yunsheng.huiyuanhui.model.front.ShopInfo;
 import com.yunsheng.huiyuanhui.service.ShopService;
 import com.yunsheng.huiyuanhui.service.ShopUserMapService;
 import com.yunsheng.huiyuanhui.service.ShopUserService;
+import com.yunsheng.huiyuanhui.util.Constants;
 import com.yunsheng.huiyuanhui.util.WeiXinUtil;
 
 import org.slf4j.Logger;
@@ -57,18 +58,21 @@ public class ShopController {
 
 
         if (userByOpenId != null) {
+            Integer shopId = shopInfo.getShopId();
+            // 为店铺生成二维码
+            String qrCodeUrl = WeiXinUtil.getQRCode(shopId.toString());
+            if (!"err".equalsIgnoreCase(qrCodeUrl)) {
+                shopInfo.setInvitePicUrl(qrCodeUrl);
+            }
+
             // 存店铺信息
             Integer insertResult = shopService.insertShop(shopInfo);
 
-            Integer shopId = shopInfo.getShopId();
             // 存店铺和user的对应关系，支持多对多
             ShopUserMap shopUserMap = new ShopUserMap();
             shopUserMap.setShopid(shopId);
             shopUserMap.setUserid(userByOpenId.getUserId());
             shopUserMapService.insertRecord(shopUserMap);
-
-            // 为店铺生成二维码
-//            String qrCodeUrl = WeiXinUtil.getQRCode(shopId.toString());
 
         }
 
@@ -101,12 +105,15 @@ public class ShopController {
         return accessToken;
     }
 
-//    @GetMapping("/getQrcode")
-//    @ResponseBody
-//    public void getQrCode(String shopId, HttpServletResponse response) {
-//        logger.info("===getAccessToken===");
-//        String accessToken = WeiXinUtil.getAccessToken();
-//    }
+    @GetMapping("/getQrCode")
+    @ResponseBody
+    public String getQrCode(Integer shopId) {
+        logger.info("===getAccessToken===");
+        Shop shopByPk = shopService.findShopByPk(shopId);
+        String qrCode = shopByPk.getInvitePicUrl();
+
+        return Constants.URL_DOMAIN + qrCode;
+    }
 
     /**
      * 给店铺添加用户 一个店铺可以有多个用户管理

@@ -1,5 +1,7 @@
 package com.yunsheng.huiyuanhui.util;
 
+import com.alibaba.fastjson.JSONObject;
+
 import org.apache.http.*;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -18,7 +20,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
@@ -33,19 +38,15 @@ public class HttpUtil {
 
     /**
      * post请求（用于请求json格式的参数）
-     *
-     * @param url
-     * @param params
-     * @return
      */
-    public static String sendPost(String url, String params) {
+    public static String sendPost4QrCode(String url, JSONObject params) {
         String result = "";
         CloseableHttpClient client = HttpClients.createDefault();
         HttpPost httpPost = new HttpPost(url);
         httpPost.setHeader("Accept", "application/json");
-        httpPost.setHeader("Content-Type", "application/json");
+        httpPost.setHeader(HTTP.CONTENT_TYPE, "application/json");
         String charSet = "UTF-8";
-        StringEntity entity = new StringEntity(params, charSet);
+        StringEntity entity = new StringEntity(params.toJSONString(), charSet);
         httpPost.setEntity(entity);
         CloseableHttpResponse response = null;
 
@@ -55,8 +56,13 @@ public class HttpUtil {
             int state = status.getStatusCode();
             if (state == HttpStatus.SC_OK) {
                 HttpEntity responseEntity = response.getEntity();
-                String jsonString = EntityUtils.toString(responseEntity);
-                return jsonString;
+                InputStream content = responseEntity.getContent();
+                String scene = params.getString("scene");
+                String filePath = saveToImgByInputStream(content, scene + ".jpeg");
+
+                // 存到七牛云
+                String qrCodeUrl = QiniuUtil.uploadFile2Qiniu(filePath, "invite:");
+                return qrCodeUrl;
             } else {
                 logger.error("请求返回:" + state + "(" + url + ")");
             }
@@ -81,10 +87,6 @@ public class HttpUtil {
 
     /**
      * post请求(用于key-value格式的参数)
-     *
-     * @param url
-     * @param params
-     * @return
      */
     public static String doPost(String url, Map params) {
 
@@ -147,5 +149,42 @@ public class HttpUtil {
             e.printStackTrace();
         }
         return result;
+    }
+
+    /*
+     * @param instreams 二进制流
+     *
+     * @param imgPath 图片的保存路径
+     *
+     * @param imgName 图片的名称
+     *
+     * @return 1：保存正常 0：保存失败
+     */
+    private static String saveToImgByInputStream(InputStream instreams, String imgName) {
+
+        File file = new File(imgName);// 可以是任何图片格式.jpg,.png等
+        if (instreams != null) {
+            try {
+                FileOutputStream fos = new FileOutputStream(file);
+
+                byte[] b = new byte[1024];
+                int nRead = 0;
+                while ((nRead = instreams.read(b)) != -1) {
+                    fos.write(b, 0, nRead);
+                }
+                fos.flush();
+                fos.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    instreams.close();
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+        }
+        return file.getPath();
     }
 }
