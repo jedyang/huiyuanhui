@@ -3,7 +3,16 @@ package com.yunsheng.huiyuanhui.dto;
 public class MyResult<T> {
     T result;
     boolean success;
+    int status; // 0:成功，1：失败
     String msg;
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
 
     public T getResult() {
         return result;

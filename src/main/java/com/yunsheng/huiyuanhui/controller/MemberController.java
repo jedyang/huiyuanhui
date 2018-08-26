@@ -57,13 +57,13 @@ public class MemberController {
     private ShopUserService shopUserService;
 
 
-    @RequestMapping("/onLogin")
-    @ResponseBody
+    @GetMapping("/onLogin")
     public MyResult<HashMap> onLogin(String code) {
         MyResult result = new MyResult();
         HashMap<String, String> auth = new HashMap<>();
 
         // https://api.weixin.qq.com/sns/jscode2session?appid=APPID&secret=SECRET&js_code=JSCODE&grant_type=authorization_code
+
         StringBuilder urlPath = new StringBuilder("https://api.weixin.qq.com/sns/jscode2session"); // 微信提供的API，这里最好也放在配置文件
         urlPath.append(String.format("?appid=%s", Constants.APPID));
         urlPath.append(String.format("&secret=%s", Constants.APPSECRET));
@@ -91,6 +91,7 @@ public class MemberController {
         }
 
         result.setSuccess(true);
+        result.setStatus(0);
         result.setResult(auth);
         return result;
     }
