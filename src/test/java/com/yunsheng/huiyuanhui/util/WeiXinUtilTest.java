@@ -16,4 +16,5 @@ public class WeiXinUtilTest {
         String accessToken =  WeiXinUtil.getQRCode("123");
         System.out.println(accessToken);
     }
+
 }

@@ -27,9 +27,7 @@ public class QiniuUtil {
         Configuration cfg = new Configuration(Zone.zone2());
 
         UploadManager uploadManager = new UploadManager(cfg);
-        //...生成上传凭证，然后准备上传
-        Auth auth = Auth.create(Constants.ACCESSKEY, Constants.SECRETKEY);
-        String upToken = auth.uploadToken(Constants.BUCKET);
+        String upToken = getQiniuToken();
         //默认不指定key的情况下，以文件内容的hash值作为文件名
         File file = new File(filePath);
         String fileName = file.getName();
@@ -53,4 +51,13 @@ public class QiniuUtil {
         }
         return key;
     }
+
+    public static String getQiniuToken(){
+        //...生成上传凭证，然后准备上传
+        Auth auth = Auth.create(Constants.ACCESSKEY, Constants.SECRETKEY);
+        String upToken = auth.uploadToken(Constants.BUCKET);
+
+        return upToken;
+    }
+
 }

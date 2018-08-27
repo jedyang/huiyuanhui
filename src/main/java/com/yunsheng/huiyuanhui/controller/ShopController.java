@@ -9,6 +9,7 @@ import com.yunsheng.huiyuanhui.service.ShopService;
 import com.yunsheng.huiyuanhui.service.ShopUserMapService;
 import com.yunsheng.huiyuanhui.service.ShopUserService;
 import com.yunsheng.huiyuanhui.util.Constants;
+import com.yunsheng.huiyuanhui.util.QiniuUtil;
 import com.yunsheng.huiyuanhui.util.WeiXinUtil;
 
 import org.slf4j.Logger;
@@ -135,5 +136,13 @@ public class ShopController {
 
         result.setSuccess(true);
         return result;
+    }
+
+    @GetMapping("/getQiniuToken")
+    @ResponseBody
+    public String getQiniuToken() {
+        logger.info("===getQiniuToken===");
+        String accessToken = QiniuUtil.getQiniuToken();
+        return accessToken;
     }
 }
