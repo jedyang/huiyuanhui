@@ -59,15 +59,23 @@ public class ShopController {
 
 
         if (userByOpenId != null) {
+            List<String> pics = shopInfo.getPics();
+            if (null != pics && pics.size() > 0){
+                StringBuilder picUrlsBuilder = new StringBuilder();
+                for (String url : pics){
+                    picUrlsBuilder.append(url).append(";");
+                }
+                shopInfo.setPicUrls(picUrlsBuilder.toString());
+            }
+            // 存店铺信息
+            Integer insertResult = shopService.insertShop(shopInfo);
+
             Integer shopId = shopInfo.getShopId();
             // 为店铺生成二维码
             String qrCodeUrl = WeiXinUtil.getQRCode(shopId.toString());
             if (!"err".equalsIgnoreCase(qrCodeUrl)) {
                 shopInfo.setInvitePicUrl(qrCodeUrl);
             }
-
-            // 存店铺信息
-            Integer insertResult = shopService.insertShop(shopInfo);
 
             // 存店铺和user的对应关系，支持多对多
             ShopUserMap shopUserMap = new ShopUserMap();

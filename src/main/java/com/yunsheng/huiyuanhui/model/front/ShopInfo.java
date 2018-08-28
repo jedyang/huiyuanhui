@@ -2,6 +2,8 @@ package com.yunsheng.huiyuanhui.model.front;
 
 import com.yunsheng.huiyuanhui.model.Shop;
 
+import java.util.List;
+
 /**
  * 供前台页面使用的模型
  */
@@ -10,6 +12,15 @@ public class ShopInfo extends Shop {
 
     private Integer userId;
 
+    private List<String> pics;
+
+    public List<String> getPics() {
+        return pics;
+    }
+
+    public void setPics(List<String> pics) {
+        this.pics = pics;
+    }
 
     public String getOpenId() {
         return openId;

@@ -55,10 +55,10 @@ public class AppUserController {
         System.out.println("请求结果：" + data);
 //        {"session_key":"c1BSzC0xC2VFUvh3pwI9hg==","openid":"otzPb4iLljrVcrwYU0lIDcwBy0vc"}
         String openId = (String) JSONObject.parseObject(data).get("openid");
-        String sessionkey = (String) JSONObject.parseObject(data).get("session_key");
+        // 会话密钥session_key 是对用户数据进行加密签名的密钥。为了应用自身的数据安全，开发者服务器不应该把会话密钥下发到小程序，也不应该对外提供这个密钥。
+//        String sessionkey = (String) JSONObject.parseObject(data).get("session_key");
         auth.put("openId", openId);
-        auth.put("loginSessionKey", openId);
-        // 将sessionkey对应生成第三方session，存到redis。用于交互
+//        auth.put("loginSessionKey", openId);
 
         // 查询memberId
         // 先去店主表查

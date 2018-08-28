@@ -1,5 +1,7 @@
 package com.yunsheng.huiyuanhui.model;
 
+import java.util.List;
+
 public class Shop {
     private Integer shopId;
 
@@ -10,6 +12,16 @@ public class Shop {
     private String shopDesc;
 
     private String invitePicUrl;
+
+    private String picUrls;
+
+    public String getPicUrls() {
+        return picUrls;
+    }
+
+    public void setPicUrls(String picUrls) {
+        this.picUrls = picUrls;
+    }
 
     public Integer getShopId() {
         return shopId;
