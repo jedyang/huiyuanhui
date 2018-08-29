@@ -8,6 +8,10 @@ import java.util.List;
  * 供前台页面使用的模型
  */
 public class ShopInfo extends Shop {
+    public ShopInfo(Shop shop){
+
+    }
+
     private String openId;
 
     private Integer userId;

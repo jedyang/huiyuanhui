@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +38,7 @@ public class ShopController {
 
     @Autowired
     private ShopUserMapService shopUserMapService;
+    private Shop theShop;
 
 
     @PostMapping("/add")
@@ -100,6 +102,26 @@ public class ShopController {
         List<Shop> allShopsOfUser = shopService.findAllShopsOfUser(userId);
 
         result.setResult(allShopsOfUser);
+        result.setSuccess(true);
+        result.setMsg("查询店铺信息成功");
+        return result;
+
+    }
+
+    /**
+     * 获取店铺信息
+     */
+    @GetMapping("/queryShop")
+    @ResponseBody
+    public MyResult<List> getShopInfoByPk(Integer shopId) {
+        MyResult result = new MyResult();
+
+        Shop theShop = shopService.findShopByPk(shopId);
+        ShopInfo shopInfo =  new ShopInfo(theShop);
+//        shopInfo.
+        shopInfo.setPics(Arrays.asList(theShop.getPicUrls().split(";")));
+
+        result.setResult(shopInfo);
         result.setSuccess(true);
         result.setMsg("查询店铺信息成功");
         return result;
