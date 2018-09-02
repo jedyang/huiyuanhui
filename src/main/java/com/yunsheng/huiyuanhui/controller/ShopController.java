@@ -12,6 +12,7 @@ import com.yunsheng.huiyuanhui.util.Constants;
 import com.yunsheng.huiyuanhui.util.QiniuUtil;
 import com.yunsheng.huiyuanhui.util.WeiXinUtil;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -117,9 +118,15 @@ public class ShopController {
         MyResult result = new MyResult();
 
         Shop theShop = shopService.findShopByPk(shopId);
-        ShopInfo shopInfo =  new ShopInfo(theShop);
-//        shopInfo.
-        shopInfo.setPics(Arrays.asList(theShop.getPicUrls().split(";")));
+        ShopInfo shopInfo =  new ShopInfo();
+        shopInfo.setShopId(theShop.getShopId());
+        shopInfo.setShopName(theShop.getShopName());
+        shopInfo.setShopAddr(theShop.getShopAddr());
+        shopInfo.setShopDesc(theShop.getShopDesc());
+        String picUrls = theShop.getPicUrls();
+        if (StringUtils.isNoneBlank(picUrls)){
+            shopInfo.setPics(Arrays.asList(theShop.getPicUrls().split(";")));
+        }
 
         result.setResult(shopInfo);
         result.setSuccess(true);
