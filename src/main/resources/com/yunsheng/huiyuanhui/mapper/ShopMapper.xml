@@ -9,12 +9,13 @@
         <result column="shop_desc" jdbcType="VARCHAR" property="shopDesc"/>
         <result column="invitePicUrl" jdbcType="VARCHAR" property="invitePicUrl"/>
         <result column="picUrls" jdbcType="VARCHAR" property="picUrls"/>
+        <result column="mainPic" jdbcType="VARCHAR" property="mainPic"/>
     </resultMap>
     <sql id="Base_Column_List">
-        shop_id, shop_name, shop_addr, shop_desc, invitePicUrl, picUrls
+        shop_id, shop_name, shop_addr, shop_desc, invitePicUrl, picUrls, mainPic
     </sql>
     <sql id="Base_Column_List_A">
-        a.shop_id, a.shop_name, a.shop_addr, a.shop_desc, a.invitePicUrl, a.picUrls
+        a.shop_id, a.shop_name, a.shop_addr, a.shop_desc, a.invitePicUrl, a.picUrls, a.mainPic
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select
@@ -27,10 +28,10 @@
         WHERE shop_id = #{shopId,jdbcType=INTEGER}
     </delete>
     <insert id="insert" parameterType="com.yunsheng.huiyuanhui.model.Shop">
-        INSERT INTO shop (shop_id, shop_name, shop_addr, shop_desc, invitePicUrl, picUrls)
+        INSERT INTO shop (shop_id, shop_name, shop_addr, shop_desc, invitePicUrl, picUrls, mainPic)
         VALUES
             (#{shopId,jdbcType=INTEGER}, #{shopName,jdbcType=VARCHAR}, #{shopAddr,jdbcType=VARCHAR},
-              #{shopDesc,jdbcType=VARCHAR}, #{invitePicUrl,jdbcType=VARCHAR}, #{picUrls,jdbcType=VARCHAR})
+              #{shopDesc,jdbcType=VARCHAR}, #{invitePicUrl,jdbcType=VARCHAR}, #{picUrls,jdbcType=VARCHAR}, #{mainPic,jdbcType=VARCHAR})
     </insert>
     <insert id="insertSelective" parameterType="com.yunsheng.huiyuanhui.model.Shop"  useGeneratedKeys="true" keyProperty="shopId" keyColumn="shop_id">
         insert into shop
@@ -50,6 +51,9 @@
             <if test="picUrls != null">
                 picUrls,
             </if>
+            <if test="mainPic != null">
+                mainPic,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="shopName != null">
@@ -66,6 +70,9 @@
             </if>
             <if test="picUrls != null">
                 #{picUrls,jdbcType=VARCHAR},
+            </if>
+            <if test="mainPic != null">
+                #{mainPic,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
@@ -87,6 +94,9 @@
             <if test="picUrls != null">
                 picUrls = #{picUrls,jdbcType=VARCHAR},
             </if>
+            <if test="mainPic != null">
+                mainPic = #{mainPic,jdbcType=VARCHAR},
+            </if>
         </set>
         where shop_id = #{shopId,jdbcType=INTEGER}
     </update>
@@ -96,7 +106,8 @@
             shop_addr    = #{shopAddr,jdbcType=VARCHAR},
             shop_desc    = #{shopDesc,jdbcType=VARCHAR},
             invitePicUrl    = #{invitePicUrl,jdbcType=VARCHAR},
-            picUrls = #{picUrls,jdbcType=VARCHAR}
+            picUrls = #{picUrls,jdbcType=VARCHAR},
+            mainPic = #{mainPic,jdbcType=VARCHAR}
         WHERE shop_id = #{shopId,jdbcType=INTEGER}
     </update>
 

@@ -127,7 +127,7 @@ public class ShopController {
         if (StringUtils.isNoneBlank(picUrls)){
             shopInfo.setPics(Arrays.asList(theShop.getPicUrls().split(";")));
         }
-
+        shopInfo.setMainPic(theShop.getMainPic());
         result.setResult(shopInfo);
         result.setSuccess(true);
         result.setMsg("查询店铺信息成功");

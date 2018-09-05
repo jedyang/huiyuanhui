@@ -15,6 +15,16 @@ public class Shop {
 
     private String picUrls;
 
+    private String mainPic;
+
+    public String getMainPic() {
+        return mainPic;
+    }
+
+    public void setMainPic(String mainPic) {
+        this.mainPic = mainPic;
+    }
+
     public String getPicUrls() {
         return picUrls;
     }
