@@ -43,7 +43,6 @@ public class ShopController {
 
 
     @PostMapping("/add")
-    @ResponseBody
     public MyResult addShop(@RequestBody ShopInfo shopInfo) {
         logger.info(shopInfo.toString());
         MyResult result = new MyResult();
@@ -87,6 +86,17 @@ public class ShopController {
             shopUserMapService.insertRecord(shopUserMap);
 
         }
+
+        result.setSuccess(true);
+        return result;
+    }
+
+    @PostMapping("/modify")
+    public MyResult modifyShop(@RequestBody ShopInfo shopInfo) {
+        logger.info(shopInfo.toString());
+        MyResult result = new MyResult();
+
+        shopService.modifyShop(shopInfo);
 
         result.setSuccess(true);
         return result;

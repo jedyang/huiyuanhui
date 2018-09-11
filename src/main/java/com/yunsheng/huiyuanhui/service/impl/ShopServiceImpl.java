@@ -32,4 +32,10 @@ public class ShopServiceImpl implements ShopService {
         Shop shop = shopMapper.selectByPrimaryKey(shopId);
         return shop;
     }
+
+    @Override
+    public Integer modifyShop(Shop shop) {
+        int i = shopMapper.updateByPrimaryKeySelective(shop);
+        return i;
+    }
 }

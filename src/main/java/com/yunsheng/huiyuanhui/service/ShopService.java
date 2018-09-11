@@ -10,4 +10,6 @@ public interface ShopService {
     List<Shop> findAllShopsOfUser(Integer userId);
 
     Shop findShopByPk(Integer shopId);
+
+    Integer modifyShop(Shop shop);
 }
