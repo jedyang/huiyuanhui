@@ -8,6 +8,7 @@ import com.yunsheng.huiyuanhui.util.PageRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+@Deprecated
 @Service("cardServiceImpl")
 public class CardServiceImpl implements CardService {
 

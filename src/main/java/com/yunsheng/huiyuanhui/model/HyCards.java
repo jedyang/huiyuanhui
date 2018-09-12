@@ -2,6 +2,7 @@ package com.yunsheng.huiyuanhui.model;
 
 import java.util.Date;
 
+@Deprecated
 public class HyCards {
     private Long cardId;
 
