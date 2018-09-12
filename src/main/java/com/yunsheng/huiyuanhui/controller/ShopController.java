@@ -12,6 +12,7 @@ import com.yunsheng.huiyuanhui.util.Constants;
 import com.yunsheng.huiyuanhui.util.QiniuUtil;
 import com.yunsheng.huiyuanhui.util.WeiXinUtil;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,9 +63,9 @@ public class ShopController {
 
         if (userByOpenId != null) {
             List<String> pics = shopInfo.getPics();
-            if (null != pics && pics.size() > 0){
+            if (null != pics && pics.size() > 0) {
                 StringBuilder picUrlsBuilder = new StringBuilder();
-                for (String url : pics){
+                for (String url : pics) {
                     picUrlsBuilder.append(url).append(";");
                 }
                 shopInfo.setPicUrls(picUrlsBuilder.toString());
@@ -96,9 +97,21 @@ public class ShopController {
         logger.info(shopInfo.toString());
         MyResult result = new MyResult();
 
-        shopService.modifyShop(shopInfo);
+        try {
+            List<String> pics = shopInfo.getPics();
+            if (CollectionUtils.isNotEmpty(pics)) {
+                StringBuilder sb = new StringBuilder();
+                for (String picUrl : pics) {
+                    sb.append(picUrl).append(";");
+                }
+                shopInfo.setPicUrls(sb.toString());
+            }
+            shopService.modifyShop(shopInfo);
 
-        result.setSuccess(true);
+            result.setSuccess(true);
+        } catch (Exception e) {
+            result.setSuccess(false);
+        }
         return result;
     }
 
@@ -106,7 +119,6 @@ public class ShopController {
      * 获取店铺信息
      */
     @GetMapping("/myShops")
-    @ResponseBody
     public MyResult<List> getShopInfo(Integer userId) {
         MyResult result = new MyResult();
 
@@ -123,18 +135,17 @@ public class ShopController {
      * 获取店铺信息
      */
     @GetMapping("/queryShop")
-    @ResponseBody
     public MyResult<List> getShopInfoByPk(Integer shopId) {
         MyResult result = new MyResult();
 
         Shop theShop = shopService.findShopByPk(shopId);
-        ShopInfo shopInfo =  new ShopInfo();
+        ShopInfo shopInfo = new ShopInfo();
         shopInfo.setShopId(theShop.getShopId());
         shopInfo.setShopName(theShop.getShopName());
         shopInfo.setShopAddr(theShop.getShopAddr());
         shopInfo.setShopDesc(theShop.getShopDesc());
         String picUrls = theShop.getPicUrls();
-        if (StringUtils.isNoneBlank(picUrls)){
+        if (StringUtils.isNoneBlank(picUrls)) {
             shopInfo.setPics(Arrays.asList(theShop.getPicUrls().split(";")));
         }
         shopInfo.setMainPic(theShop.getMainPic());
