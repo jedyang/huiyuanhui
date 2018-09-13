@@ -10,5 +10,7 @@ public interface ShopMemberMapService {
 
     List<ShopMemberMap> findRecord(ShopMemberMap shopMemberMap);
 
+    ShopMemberMap findByPK(Integer id);
+
     int updateRecord(ShopMemberMap shopMemberMap);
 }

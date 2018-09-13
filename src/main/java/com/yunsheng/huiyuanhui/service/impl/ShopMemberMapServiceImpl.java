@@ -29,6 +29,12 @@ public class ShopMemberMapServiceImpl implements ShopMemberMapService {
     }
 
     @Override
+    public ShopMemberMap findByPK(Integer id) {
+        ShopMemberMap shopMemberMap = shopMemberMapMapper.selectByPrimaryKey(id);
+        return shopMemberMap;
+    }
+
+    @Override
     public int updateRecord(ShopMemberMap shopMemberMap) {
         int i = shopMemberMapMapper.updateByPrimaryKeySelective(shopMemberMap);
         return i;

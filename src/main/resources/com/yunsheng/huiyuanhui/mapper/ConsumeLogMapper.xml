@@ -4,6 +4,7 @@
 <mapper namespace="com.yunsheng.huiyuanhui.mapper.ConsumeLogMapper">
     <resultMap id="BaseResultMap" type="com.yunsheng.huiyuanhui.model.ConsumeLog">
         <id column="log_id" property="logId" jdbcType="INTEGER"/>
+        <result column="card_id" property="cardId" jdbcType="INTEGER"/>
         <result column="member_id" property="memberId" jdbcType="INTEGER"/>
         <result column="shop_id" property="shopId" jdbcType="INTEGER"/>
         <result column="money" property="money" jdbcType="DOUBLE"/>
@@ -16,16 +17,19 @@
         <result column="log_time" property="logTime" jdbcType="TIMESTAMP"/>
     </resultMap>
     <sql id="Base_Column_List">
-        log_id, member_id, shop_id, money, old_money, new_money, points, old_points, new_points,
+        log_id, card_id, member_id, shop_id, money, old_money, new_money, points, old_points, new_points,
         type, log_time
     </sql>
     <sql id="query_Where_Clause">
         <where>
             <if test="memberId != null">
-                AND member_id = #{memberId,jdbcType=VARCHAR}
+                AND member_id = #{memberId,jdbcType=INTEGER}
             </if>
             <if test="shopId != null">
-                AND shop_id = #{shopId,jdbcType=VARCHAR}
+                AND shop_id = #{shopId,jdbcType=INTEGER}
+            </if>
+            <if test="cardId != null">
+                AND card_id = #{shopId,jdbcType=INTEGER}
             </if>
         </where>
     </sql>
@@ -47,11 +51,11 @@
         WHERE log_id = #{logId,jdbcType=INTEGER}
     </delete>
     <insert id="insert" parameterType="com.yunsheng.huiyuanhui.model.ConsumeLog">
-        INSERT INTO consume_log (log_id, member_id, shop_id,
+        INSERT INTO consume_log (log_id, card_id, member_id, shop_id,
                                  money, old_money, new_money,
                                  points, old_points, new_points,
                                  type, log_time)
-        VALUES (#{logId,jdbcType=INTEGER}, #{memberId,jdbcType=INTEGER}, #{shopId,jdbcType=INTEGER},
+        VALUES (#{logId,jdbcType=INTEGER}, #{cardId,jdbcType=INTEGER}, #{memberId,jdbcType=INTEGER}, #{shopId,jdbcType=INTEGER},
                                            #{money,jdbcType=DOUBLE}, #{oldMoney,jdbcType=DOUBLE},
                                            #{newMoney,jdbcType=DOUBLE},
                                            #{points,jdbcType=INTEGER},
@@ -64,6 +68,9 @@
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="logId != null">
                 log_id,
+            </if>
+            <if test="cardId != null">
+                card_id,
             </if>
             <if test="memberId != null">
                 member_id,
@@ -99,6 +106,9 @@
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="logId != null">
                 #{logId,jdbcType=INTEGER},
+            </if>
+            <if test="cardId != null">
+                #{cardId,jdbcType=INTEGER},
             </if>
             <if test="memberId != null">
                 #{memberId,jdbcType=INTEGER},
@@ -136,6 +146,9 @@
             parameterType="com.yunsheng.huiyuanhui.model.ConsumeLog">
         update consume_log
         <set>
+            <if test="cardId != null">
+                card_id = #{cardId,jdbcType=INTEGER},
+            </if>
             <if test="memberId != null">
                 member_id = #{memberId,jdbcType=INTEGER},
             </if>
@@ -171,7 +184,8 @@
     </update>
     <update id="updateByPrimaryKey" parameterType="com.yunsheng.huiyuanhui.model.ConsumeLog">
         UPDATE consume_log
-        SET member_id  = #{memberId,jdbcType=INTEGER},
+        SET card_id  = #{cardId,jdbcType=INTEGER},
+        member_id  = #{memberId,jdbcType=INTEGER},
             shop_id    = #{shopId,jdbcType=INTEGER},
             money      = #{money,jdbcType=DOUBLE},
             old_money  = #{oldMoney,jdbcType=DOUBLE},

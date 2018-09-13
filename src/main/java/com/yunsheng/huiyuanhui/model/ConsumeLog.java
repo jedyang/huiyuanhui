@@ -7,6 +7,7 @@ import java.util.Date;
 public class ConsumeLog {
     private Integer logId;
 
+    private Integer cardId;
     private Integer memberId;
 
     private Integer shopId;
@@ -29,6 +30,18 @@ public class ConsumeLog {
     private String typeName;
 
     private Date logTime;
+
+    public Integer getCardId() {
+        return cardId;
+    }
+
+    public void setCardId(Integer cardId) {
+        this.cardId = cardId;
+    }
+
+    public void setTypeName(String typeName) {
+        this.typeName = typeName;
+    }
 
     public Integer getLogId() {
         return logId;

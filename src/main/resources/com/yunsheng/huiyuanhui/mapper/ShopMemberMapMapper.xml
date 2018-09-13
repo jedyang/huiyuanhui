@@ -10,9 +10,18 @@
         <result column="point" jdbcType="INTEGER" property="point"/>
         <result column="type" jdbcType="INTEGER" property="type"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="shop_name" jdbcType="VARCHAR" property="shopName"/>
+        <result column="shop_addr" jdbcType="VARCHAR" property="shopAddr"/>
+        <result column="shop_desc" jdbcType="VARCHAR" property="shopDesc"/>
+        <result column="invitePicUrl" jdbcType="VARCHAR" property="invitePicUrl"/>
+        <result column="picUrls" jdbcType="VARCHAR" property="picUrls"/>
+        <result column="mainPic" jdbcType="VARCHAR" property="mainPic"/>
     </resultMap>
     <sql id="Base_Column_List">
         id, shop_id, member_id, money, point, type, create_time
+    </sql>
+    <sql id="Extend_Column_List">
+        smm.id, smm.shop_id, smm.member_id, smm.money, smm.point, smm.type, smm.create_time, s.shop_name, s.shop_addr, s.shop_desc, s.invitePicUrl, s.picUrls, s.mainPic
     </sql>
     <sql id="query_Where_Clause">
         <where>
@@ -130,8 +139,8 @@
 
     <select id="selectBySelective" parameterType="com.yunsheng.huiyuanhui.model.ShopMemberMap" resultMap="BaseResultMap">
         select
-        <include refid="Base_Column_List"/>
-        from shop_member_map
+        <include refid="Extend_Column_List"/>
+        from shop_member_map smm INNER JOIN shop s ON smm.shop_id = s.shop_id
         <include refid="query_Where_Clause"/>
     </select>
 

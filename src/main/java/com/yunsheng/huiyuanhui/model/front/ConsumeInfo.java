@@ -6,6 +6,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  * 消费信息
  */
 public class ConsumeInfo {
+    private Integer cardId;
+
     private Integer memberId;
 
     private Integer shopId;
@@ -14,6 +16,13 @@ public class ConsumeInfo {
 
     private Integer points;
 
+    public Integer getCardId() {
+        return cardId;
+    }
+
+    public void setCardId(Integer cardId) {
+        this.cardId = cardId;
+    }
 
     public Integer getMemberId() {
         return memberId;

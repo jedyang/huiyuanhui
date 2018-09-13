@@ -258,28 +258,36 @@ public class MemberController {
         MyResult myResult = new MyResult();
         try {
 
-            Member memberById = memberService.findByMemberId(consumeInfo.getMemberId().toString());
-            if (null == memberById) {
+//            Member memberById = memberService.findByMemberId(consumeInfo.getMemberId().toString());
+//            if (null == memberById) {
+//                myResult.setSuccess(false);
+//                myResult.setMsg("该会员未注册");
+//                return myResult;
+//            }
+
+//            ShopMemberMap queryParam = new ShopMemberMap();
+//            queryParam.setId(consumeInfo.getCardId());
+//            queryParam.setShopId(consumeInfo.getShopId());
+//            queryParam.setMemberId(consumeInfo.getMemberId());
+//            List<ShopMemberMap> shopMemberMaps = shopMemberMapService.findRecord(queryParam);
+
+            if (null == consumeInfo.getCardId()) {
                 myResult.setSuccess(false);
-                myResult.setMsg("该会员未注册");
+                myResult.setMsg("会员卡号不能为空");
+                return myResult;
+            }
+            ShopMemberMap shopMemberMap = shopMemberMapService.findByPK(consumeInfo.getCardId());
+            if (null == shopMemberMap) {
+                myResult.setSuccess(false);
+                myResult.setMsg("该会员卡不存在");
                 return myResult;
             }
 
-            ShopMemberMap queryParam = new ShopMemberMap();
-            queryParam.setShopId(consumeInfo.getShopId());
-            queryParam.setMemberId(consumeInfo.getMemberId());
-            List<ShopMemberMap> shopMemberMaps = shopMemberMapService.findRecord(queryParam);
-            if (null == shopMemberMaps || shopMemberMaps.size() == 0) {
-                myResult.setSuccess(false);
-                myResult.setMsg("该会员不属于该店铺");
-                return myResult;
-            }
-
-            ShopMemberMap shopMemberMap = shopMemberMaps.get(0);
+//            ShopMemberMap shopMemberMap = shopMemberMaps.get(0);
             // 消费
             BigDecimal oldMoney = new BigDecimal(shopMemberMap.getMoney());
             BigDecimal money = new BigDecimal(consumeInfo.getMoney());
-            BigDecimal subMoney = oldMoney.subtract(money);
+            BigDecimal subMoney = oldMoney.subtract(money); // 最新余额
             if (subMoney.compareTo(new BigDecimal(0)) < 0) {
                 myResult.setSuccess(false);
                 myResult.setMsg("余额不足，请充值");
@@ -289,7 +297,7 @@ public class MemberController {
 
             Integer oldPoint = shopMemberMap.getPoint();
             Integer point = consumeInfo.getPoints();
-            Integer subPoint = oldPoint - point;
+            Integer subPoint = oldPoint - point;  //最新积分
             if (subPoint < 0) {
                 myResult.setSuccess(false);
                 myResult.setMsg("积分不足，请修改");
@@ -307,8 +315,9 @@ public class MemberController {
 
             // 记录消费历史
             ConsumeLog log = new ConsumeLog();
-            log.setMemberId(consumeInfo.getMemberId());
-            log.setShopId(consumeInfo.getShopId());
+            log.setCardId(consumeInfo.getCardId());
+            log.setMemberId(shopMemberMap.getMemberId());
+            log.setShopId(shopMemberMap.getShopId());
             log.setMoney(money.doubleValue());
             log.setOldMoney(oldMoney.doubleValue());
             log.setNewMoney(subMoney.doubleValue());

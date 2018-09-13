@@ -17,6 +17,67 @@ public class ShopMemberMap {
 
     private Date createTime;
 
+    // 店铺信息，供前端展示使用
+    private String shopName;
+
+    private String shopAddr;
+
+    private String shopDesc;
+
+    private String invitePicUrl;
+
+    private String picUrls;
+
+    private String mainPic;
+
+    public String getInvitePicUrl() {
+        return invitePicUrl;
+    }
+
+    public void setInvitePicUrl(String invitePicUrl) {
+        this.invitePicUrl = invitePicUrl;
+    }
+
+    public String getShopName() {
+        return shopName;
+    }
+
+    public void setShopName(String shopName) {
+        this.shopName = shopName;
+    }
+
+    public String getShopAddr() {
+        return shopAddr;
+    }
+
+    public void setShopAddr(String shopAddr) {
+        this.shopAddr = shopAddr;
+    }
+
+    public String getShopDesc() {
+        return shopDesc;
+    }
+
+    public void setShopDesc(String shopDesc) {
+        this.shopDesc = shopDesc;
+    }
+
+    public String getPicUrls() {
+        return picUrls;
+    }
+
+    public void setPicUrls(String picUrls) {
+        this.picUrls = picUrls;
+    }
+
+    public String getMainPic() {
+        return mainPic;
+    }
+
+    public void setMainPic(String mainPic) {
+        this.mainPic = mainPic;
+    }
+
     public Integer getId() {
         return id;
     }
