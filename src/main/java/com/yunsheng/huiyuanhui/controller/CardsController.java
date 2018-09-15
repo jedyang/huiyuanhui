@@ -35,7 +35,6 @@ public class CardsController {
      * 查询我的所有会员卡
      */
     @RequestMapping("/myCards")
-    @ResponseBody
     public MyResult getAllMember(@RequestParam(name = "memberId") Integer memberId) {
         MyResult result = new MyResult();
 
@@ -43,6 +42,30 @@ public class CardsController {
             ShopMemberMap shopMemberMap = new ShopMemberMap();
             shopMemberMap.setMemberId(memberId);
             List<ShopMemberMap> record = shopMemberMapService.findRecord(shopMemberMap);
+
+            result.setResult(record);
+            result.setSuccess(true);
+            result.setStatus(0);
+
+        } catch (Exception e) {
+            result.setSuccess(false);
+            result.setMsg("查询会员卡失败");
+            result.setStatus(1);
+        }
+
+
+        return result;
+    }
+
+    /**
+     * 查询我的所有会员卡
+     */
+    @RequestMapping("/cardInfo")
+    public MyResult getCardInfo(@RequestParam(name = "cardId") Integer cardId) {
+        MyResult result = new MyResult();
+
+        try {
+            ShopMemberMap record = shopMemberMapService.findByPK(cardId);
 
             result.setResult(record);
             result.setSuccess(true);

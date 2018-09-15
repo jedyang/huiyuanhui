@@ -29,7 +29,8 @@
                 AND shop_id = #{shopId,jdbcType=INTEGER}
             </if>
             <if test="cardId != null">
-                AND card_id = #{shopId,jdbcType=INTEGER}
+                AND card_id = #{cardId
+                ,jdbcType=INTEGER}
             </if>
         </where>
     </sql>

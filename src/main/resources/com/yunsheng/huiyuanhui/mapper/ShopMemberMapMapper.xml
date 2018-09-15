@@ -35,8 +35,8 @@
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select
-        <include refid="Base_Column_List"/>
-        from shop_member_map
+        <include refid="Extend_Column_List"/>
+        from shop_member_map smm INNER JOIN shop s ON smm.shop_id = s.shop_id
         where id = #{id,jdbcType=INTEGER}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">

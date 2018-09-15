@@ -2,6 +2,7 @@ package com.yunsheng.huiyuanhui.model;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class ConsumeLog {
@@ -30,6 +31,18 @@ public class ConsumeLog {
     private String typeName;
 
     private Date logTime;
+
+    // 前台使用
+    private String logTimeStr;
+
+    public String getLogTimeStr() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return sdf.format(this.logTime);
+    }
+
+    public void setLogTimeStr(String logTimeStr) {
+        this.logTimeStr = logTimeStr;
+    }
 
     public Integer getCardId() {
         return cardId;
