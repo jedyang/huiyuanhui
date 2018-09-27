@@ -12,10 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,5 +78,29 @@ public class CardsController {
         return result;
     }
 
+    /**
+     * 查询我的所有会员卡
+     */
+    @PostMapping("/pay")
+    public MyResult pay(@RequestBody Integer cardId,
+                        @RequestBody Integer useMoney,
+                        @RequestBody Integer usePoint) {
+        MyResult result = new MyResult();
 
+        try {
+            ShopMemberMap record = shopMemberMapService.findByPK(cardId);
+
+            result.setResult(record);
+            result.setSuccess(true);
+            result.setStatus(0);
+
+        } catch (Exception e) {
+            result.setSuccess(false);
+            result.setMsg("查询会员卡失败");
+            result.setStatus(1);
+        }
+
+
+        return result;
+    }
 }
