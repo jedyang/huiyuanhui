@@ -24,3 +24,7 @@ nbdist/
 .nb-gradle/
 *.log
 *.gz
+*.jar
+*.jar
+.mvn/wrapper/maven-wrapper.properties
+.mvn/wrapper/maven-wrapper.properties

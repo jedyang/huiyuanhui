@@ -3,12 +3,14 @@ package com.yunsheng.huiyuanhui.controller;
 import com.yunsheng.huiyuanhui.dto.MyResult;
 import com.yunsheng.huiyuanhui.model.HyCards;
 import com.yunsheng.huiyuanhui.model.Member;
+import com.yunsheng.huiyuanhui.model.Pay;
 import com.yunsheng.huiyuanhui.model.ShopMemberMap;
 import com.yunsheng.huiyuanhui.service.CardService;
 import com.yunsheng.huiyuanhui.service.ShopMemberMapService;
 import com.yunsheng.huiyuanhui.util.PageRequest;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.HttpRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/api/cards")
@@ -55,6 +59,31 @@ public class CardsController {
     }
 
     /**
+     * 支付
+     */
+
+    @PostMapping("/pay")
+    public MyResult pay(@RequestBody Pay pay) {
+        MyResult result = new MyResult();
+
+        try {
+            ShopMemberMap record = shopMemberMapService.findByPK(Integer.valueOf(pay.getCardId()));
+
+            result.setResult(record);
+            result.setSuccess(true);
+            result.setStatus(0);
+
+        } catch (Exception e) {
+            result.setSuccess(false);
+            result.setMsg("查询会员卡失败");
+            result.setStatus(1);
+        }
+
+
+        return result;
+    }
+
+    /**
      * 查询我的所有会员卡
      */
     @RequestMapping("/cardInfo")
@@ -78,29 +107,5 @@ public class CardsController {
         return result;
     }
 
-    /**
-     * 查询我的所有会员卡
-     */
-    @PostMapping("/pay")
-    public MyResult pay(@RequestBody Integer cardId,
-                        @RequestBody Integer useMoney,
-                        @RequestBody Integer usePoint) {
-        MyResult result = new MyResult();
 
-        try {
-            ShopMemberMap record = shopMemberMapService.findByPK(cardId);
-
-            result.setResult(record);
-            result.setSuccess(true);
-            result.setStatus(0);
-
-        } catch (Exception e) {
-            result.setSuccess(false);
-            result.setMsg("查询会员卡失败");
-            result.setStatus(1);
-        }
-
-
-        return result;
-    }
 }
