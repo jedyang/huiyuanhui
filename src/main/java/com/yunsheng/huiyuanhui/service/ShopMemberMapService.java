@@ -1,6 +1,8 @@
 package com.yunsheng.huiyuanhui.service;
 
+import com.yunsheng.huiyuanhui.model.Pay;
 import com.yunsheng.huiyuanhui.model.ShopMemberMap;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -13,4 +15,6 @@ public interface ShopMemberMapService {
     ShopMemberMap findByPK(Integer id);
 
     int updateRecord(ShopMemberMap shopMemberMap);
+
+    boolean pay(Pay payInfo);
 }

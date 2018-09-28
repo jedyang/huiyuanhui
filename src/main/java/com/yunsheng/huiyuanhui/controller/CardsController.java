@@ -61,21 +61,20 @@ public class CardsController {
     /**
      * 支付
      */
-
     @PostMapping("/pay")
     public MyResult pay(@RequestBody Pay pay) {
         MyResult result = new MyResult();
 
         try {
-            ShopMemberMap record = shopMemberMapService.findByPK(Integer.valueOf(pay.getCardId()));
+            boolean payResult = shopMemberMapService.pay(pay);
 
-            result.setResult(record);
+            result.setResult(payResult);
             result.setSuccess(true);
             result.setStatus(0);
 
         } catch (Exception e) {
             result.setSuccess(false);
-            result.setMsg("查询会员卡失败");
+            result.setMsg("支付失败");
             result.setStatus(1);
         }
 

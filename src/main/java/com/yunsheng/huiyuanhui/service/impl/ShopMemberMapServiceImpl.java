@@ -2,11 +2,13 @@ package com.yunsheng.huiyuanhui.service.impl;
 
 import com.yunsheng.huiyuanhui.mapper.ShopMemberMapMapper;
 import com.yunsheng.huiyuanhui.model.Member;
+import com.yunsheng.huiyuanhui.model.Pay;
 import com.yunsheng.huiyuanhui.model.ShopMemberMap;
 import com.yunsheng.huiyuanhui.service.ShopMemberMapService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -38,6 +40,21 @@ public class ShopMemberMapServiceImpl implements ShopMemberMapService {
     public int updateRecord(ShopMemberMap shopMemberMap) {
         int i = shopMemberMapMapper.updateByPrimaryKeySelective(shopMemberMap);
         return i;
+    }
+
+    @Transactional
+    @Override
+    public boolean pay(Pay payInfo) {
+        ShopMemberMap record = this.findByPK(Integer.valueOf(payInfo.getCardId()));
+        // 减掉卡里的钱或积分
+        record.setMoney(record.getMoney() - Double.valueOf(payInfo.getUseMoney()));
+        record.setPoint(record.getPoint() - Integer.valueOf(payInfo.getUsePoint()));
+
+        this.updateRecord(record);
+
+        throw new RuntimeException();
+        // 记录log
+//        return false;
     }
 
 }
