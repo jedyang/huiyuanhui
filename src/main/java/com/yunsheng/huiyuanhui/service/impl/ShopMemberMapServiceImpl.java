@@ -1,6 +1,8 @@
 package com.yunsheng.huiyuanhui.service.impl;
 
+import com.yunsheng.huiyuanhui.mapper.ConsumeLogMapper;
 import com.yunsheng.huiyuanhui.mapper.ShopMemberMapMapper;
+import com.yunsheng.huiyuanhui.model.ConsumeLog;
 import com.yunsheng.huiyuanhui.model.Member;
 import com.yunsheng.huiyuanhui.model.Pay;
 import com.yunsheng.huiyuanhui.model.ShopMemberMap;
@@ -17,6 +19,9 @@ public class ShopMemberMapServiceImpl implements ShopMemberMapService {
 
     @Autowired
     private ShopMemberMapMapper shopMemberMapMapper;
+
+    @Autowired
+    private ConsumeLogMapper consumeLogMapper;
 
     @Override
     public int insertRecord(ShopMemberMap shopMemberMap) {
@@ -44,17 +49,32 @@ public class ShopMemberMapServiceImpl implements ShopMemberMapService {
 
     @Transactional
     @Override
-    public boolean pay(Pay payInfo) {
+    public ConsumeLog pay(Pay payInfo) {
         ShopMemberMap record = this.findByPK(Integer.valueOf(payInfo.getCardId()));
+
+
+        // 记录log
+        ConsumeLog consumeLog = new ConsumeLog();
+        consumeLog.setShopId(record.getShopId());
+        consumeLog.setCardId(record.getId());
+        consumeLog.setMemberId(record.getMemberId());
+        consumeLog.setType(1);
+        consumeLog.setMoney(Double.valueOf(payInfo.getUseMoney()));
+        consumeLog.setPoints(Integer.valueOf(payInfo.getUsePoint()));
+        consumeLog.setOldPoints(record.getPoint());
+        consumeLog.setOldMoney(record.getMoney());
+        consumeLog.setNewPoints(record.getPoint() - Integer.valueOf(payInfo.getUsePoint()));
+        consumeLog.setNewMoney(record.getMoney() - Double.valueOf(payInfo.getUseMoney()));
+
+        consumeLogMapper.insertSelective(consumeLog);
+
         // 减掉卡里的钱或积分
         record.setMoney(record.getMoney() - Double.valueOf(payInfo.getUseMoney()));
         record.setPoint(record.getPoint() - Integer.valueOf(payInfo.getUsePoint()));
 
         this.updateRecord(record);
 
-        throw new RuntimeException();
-        // 记录log
-//        return false;
+        return consumeLog;
     }
 
 }

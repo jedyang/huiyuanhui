@@ -25,6 +25,7 @@ public class ConsumeLog {
 
     private Integer newPoints;
 
+    //    类型：1，消费；2，充值；3，奖励
     private Integer type;
 
     // 前台使用

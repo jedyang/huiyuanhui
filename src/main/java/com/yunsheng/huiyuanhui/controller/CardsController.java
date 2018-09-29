@@ -1,6 +1,7 @@
 package com.yunsheng.huiyuanhui.controller;
 
 import com.yunsheng.huiyuanhui.dto.MyResult;
+import com.yunsheng.huiyuanhui.model.ConsumeLog;
 import com.yunsheng.huiyuanhui.model.HyCards;
 import com.yunsheng.huiyuanhui.model.Member;
 import com.yunsheng.huiyuanhui.model.Pay;
@@ -62,15 +63,21 @@ public class CardsController {
      * 支付
      */
     @PostMapping("/pay")
-    public MyResult pay(@RequestBody Pay pay) {
-        MyResult result = new MyResult();
+    public MyResult<ConsumeLog> pay(@RequestBody Pay pay) {
+        MyResult<ConsumeLog> result = new MyResult<>();
 
         try {
-            boolean payResult = shopMemberMapService.pay(pay);
+            ConsumeLog payResult = shopMemberMapService.pay(pay);
 
-            result.setResult(payResult);
-            result.setSuccess(true);
-            result.setStatus(0);
+            if (payResult != null) {
+                result.setResult(payResult);
+                result.setSuccess(true);
+                result.setStatus(0);
+            } else {
+                result.setSuccess(false);
+                result.setMsg("支付失败");
+                result.setStatus(1);
+            }
 
         } catch (Exception e) {
             result.setSuccess(false);

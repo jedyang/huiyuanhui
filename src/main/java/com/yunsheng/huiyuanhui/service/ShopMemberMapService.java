@@ -1,5 +1,6 @@
 package com.yunsheng.huiyuanhui.service;
 
+import com.yunsheng.huiyuanhui.model.ConsumeLog;
 import com.yunsheng.huiyuanhui.model.Pay;
 import com.yunsheng.huiyuanhui.model.ShopMemberMap;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,5 +17,5 @@ public interface ShopMemberMapService {
 
     int updateRecord(ShopMemberMap shopMemberMap);
 
-    boolean pay(Pay payInfo);
+    ConsumeLog pay(Pay payInfo);
 }

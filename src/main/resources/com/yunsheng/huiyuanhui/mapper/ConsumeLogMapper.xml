@@ -64,7 +64,7 @@
                                            #{newPoints,jdbcType=INTEGER},
                                            #{type,jdbcType=INTEGER}, #{logTime,jdbcType=TIMESTAMP})
     </insert>
-    <insert id="insertSelective" parameterType="com.yunsheng.huiyuanhui.model.ConsumeLog">
+    <insert id="insertSelective" parameterType="com.yunsheng.huiyuanhui.model.ConsumeLog"  keyProperty="logId" useGeneratedKeys="true">
         insert into consume_log
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="logId != null">
