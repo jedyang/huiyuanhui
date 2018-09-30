@@ -157,7 +157,6 @@ public class ShopController {
     }
 
     @GetMapping("/getAccessToken")
-    @ResponseBody
     public String getAccessToken() {
         logger.info("===getAccessToken===");
         String accessToken = WeiXinUtil.getAccessToken();
@@ -165,7 +164,6 @@ public class ShopController {
     }
 
     @GetMapping("/getQrCode")
-    @ResponseBody
     public String getQrCode(Integer shopId) {
         logger.info("===getAccessToken===");
         Shop shopByPk = shopService.findShopByPk(shopId);
@@ -178,7 +176,6 @@ public class ShopController {
      * 给店铺添加用户 一个店铺可以有多个用户管理
      */
     @PostMapping("/addShopUser")
-    @ResponseBody
     public MyResult addShopUser(@RequestBody ShopInfo shopInfo) {
         logger.info(shopInfo.toString());
         MyResult result = new MyResult();
@@ -197,10 +194,20 @@ public class ShopController {
     }
 
     @GetMapping("/getQiniuToken")
-    @ResponseBody
     public String getQiniuToken() {
         logger.info("===getQiniuToken===");
         String accessToken = QiniuUtil.getQiniuToken();
         return accessToken;
+    }
+
+    // 获取流水信息
+    @GetMapping("/getConsumeList")
+    public MyResult getConsumeList() {
+        logger.info("===getQiniuToken===");
+        MyResult result = new MyResult();
+        String accessToken = QiniuUtil.getQiniuToken();
+
+
+        return result;
     }
 }
