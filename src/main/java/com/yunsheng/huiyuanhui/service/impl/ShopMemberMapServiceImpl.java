@@ -74,7 +74,9 @@ public class ShopMemberMapServiceImpl implements ShopMemberMapService {
 
         this.updateRecord(record);
 
-        return consumeLog;
+        // 重新从数据库里查出来，为了得到时间数据
+        ConsumeLog consumeLog1 = consumeLogMapper.selectByPrimaryKey(consumeLog.getLogId());
+        return consumeLog1;
     }
 
 }

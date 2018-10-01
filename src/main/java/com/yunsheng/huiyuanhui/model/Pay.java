@@ -1,31 +1,31 @@
 package com.yunsheng.huiyuanhui.model;
 
 public class Pay {
-        private String cardId;
-        private String useMoney;
-        private String usePoint;
+        private Integer cardId;
+        private Double useMoney;
+        private Integer usePoint;
 
-        public String getCardId() {
+        public Integer getCardId() {
             return cardId;
         }
 
-        public void setCardId(String cardId) {
+        public void setCardId(Integer cardId) {
             this.cardId = cardId;
         }
 
-        public String getUseMoney() {
+        public Double getUseMoney() {
             return useMoney;
         }
 
-        public void setUseMoney(String useMoney) {
+        public void setUseMoney(Double useMoney) {
             this.useMoney = useMoney;
         }
 
-        public String getUsePoint() {
+        public Integer getUsePoint() {
             return usePoint;
         }
 
-        public void setUsePoint(String usePoint) {
+        public void setUsePoint(Integer usePoint) {
             this.usePoint = usePoint;
         }
     }
