@@ -157,10 +157,19 @@ public class ShopController {
     }
 
     @GetMapping("/getAccessToken")
-    public String getAccessToken() {
+    public MyResult<String> getAccessToken() {
         logger.info("===getAccessToken===");
-        String accessToken = WeiXinUtil.getAccessToken();
-        return accessToken;
+        MyResult<String> result = new MyResult<>();
+        String accessToken = null;
+        try {
+            accessToken = WeiXinUtil.getAccessToken();
+            result.setSuccess(true);
+            result.setResult(accessToken);
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.setSuccess(false);
+        }
+        return result;
     }
 
     @GetMapping("/getQrCode")
