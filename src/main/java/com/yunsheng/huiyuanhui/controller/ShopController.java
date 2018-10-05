@@ -75,7 +75,7 @@ public class ShopController {
 
             Integer shopId = shopInfo.getShopId();
             // 为店铺生成二维码
-            String qrCodeUrl = WeiXinUtil.getQRCode(shopId.toString());
+            String qrCodeUrl = WeiXinUtil.getQRCode(shopId.toString(), "", "invite:");//TODO
             if (!"err".equalsIgnoreCase(qrCodeUrl)) {
                 shopInfo.setInvitePicUrl(qrCodeUrl);
             }
@@ -120,7 +120,7 @@ public class ShopController {
      */
     @GetMapping("/myShops")
     public MyResult<List> getShopInfo(Integer userId) {
-        MyResult result = new MyResult();
+        MyResult<List> result = new MyResult<>();
 
         List<Shop> allShopsOfUser = shopService.findAllShopsOfUser(userId);
 
@@ -181,6 +181,26 @@ public class ShopController {
         return Constants.URL_DOMAIN + qrCode;
     }
 
+    /**
+     * 获取支付二维码
+     *
+     * @return
+     */
+    @GetMapping("/getPayQrCode")
+    public MyResult<String> getPayQrCode(String scene) {
+        logger.info("===getPayQrCode===");
+        MyResult<String> result = new MyResult<>();
+        String qrCode;
+        try {
+            qrCode = WeiXinUtil.getQRCode(scene, "", "pay:");//TODO
+            result.setSuccess(true);
+            result.setResult(qrCode);
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.setSuccess(false);
+        }
+        return result;
+    }
     /**
      * 给店铺添加用户 一个店铺可以有多个用户管理
      */

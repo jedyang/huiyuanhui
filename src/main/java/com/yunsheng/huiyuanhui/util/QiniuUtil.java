@@ -20,6 +20,7 @@ import java.io.IOException;
 
 public class QiniuUtil {
     private static final Logger logger = LoggerFactory.getLogger(QiniuUtil.class);
+    public static final String ERR = "err";
 
     //文件上传
     public static String uploadFile2Qiniu(String filePath, String pre) throws IOException {
@@ -36,7 +37,7 @@ public class QiniuUtil {
         try {
             Response response = uploadManager.put(filePath, key, upToken);
             if (response.statusCode != 200){
-                return "err";
+                return ERR;
             }
             //解析上传成功的结果
 //            DefaultPutRet putRet = new Gson().fromJson(response.bodyString(), DefaultPutRet.class);
