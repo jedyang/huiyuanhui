@@ -12,8 +12,8 @@ public class Constants {
 
 
     // 七牛
-    public final static String ACCESSKEY = "nv1fFv6J_ZfN5ZosACjD50X87SsxII4C2J1LZSIB";
-    public final static String SECRETKEY = "xV3TcN84L8tW_Pe3PtlB51BR0R4MTfM33rLrBEu7";
-    public final static String URL_DOMAIN = "http://pdumzxy0c.bkt.clouddn.com/";
-    public final static String BUCKET = "ihuiyuan";
+    public final static String ACCESSKEY = "00AfZ_-_3yewn4-NwNzQPkAVRTLlL3psmcm-664o";
+    public final static String SECRETKEY = "9a5NVVY6GE0tyXFNWV-aAcvYGuI1ItiVas5jo5hH";
+    public final static String URL_DOMAIN = "http://pc002hl20.bkt.clouddn.com/";
+    public final static String BUCKET = "meyley";
 }

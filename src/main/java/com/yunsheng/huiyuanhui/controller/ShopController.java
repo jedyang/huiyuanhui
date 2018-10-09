@@ -194,7 +194,7 @@ public class ShopController {
         try {
             qrCode = WeiXinUtil.getQRCode(scene, "", "pay:");//TODO
             result.setSuccess(true);
-            result.setResult(qrCode);
+            result.setResult(Constants.URL_DOMAIN + qrCode);
         } catch (Exception e) {
             e.printStackTrace();
             result.setSuccess(false);
