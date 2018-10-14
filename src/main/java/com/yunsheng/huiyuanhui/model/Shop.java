@@ -1,7 +1,5 @@
 package com.yunsheng.huiyuanhui.model;
 
-import java.util.List;
-
 public class Shop {
     private Integer shopId;
 
@@ -16,6 +14,26 @@ public class Shop {
     private String picUrls;
 
     private String mainPic;
+
+    private String shopLatitude;
+
+    private String shopLongitude;
+
+    public String getShopLatitude() {
+        return shopLatitude;
+    }
+
+    public void setShopLatitude(String shopLatitude) {
+        this.shopLatitude = shopLatitude;
+    }
+
+    public String getShopLongitude() {
+        return shopLongitude;
+    }
+
+    public void setShopLongitude(String shopLongitude) {
+        this.shopLongitude = shopLongitude;
+    }
 
     public String getMainPic() {
         return mainPic;

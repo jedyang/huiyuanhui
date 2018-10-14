@@ -239,4 +239,22 @@ public class ShopController {
 
         return result;
     }
+
+    @GetMapping("/getNearShops")
+    public MyResult getNearShops(@RequestParam Double longitude, @RequestParam Double latitude){
+        logger.info("===getNearShops===");
+        MyResult<List> result = new MyResult<>();
+
+        try {
+            List<Shop> nearShops = shopService.findNearShops(longitude, latitude);
+            result.setResult(nearShops);
+            result.setSuccess(true);
+            result.setStatus(0);
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.setSuccess(false);
+            result.setStatus(1);
+        }
+        return result;
+    }
 }

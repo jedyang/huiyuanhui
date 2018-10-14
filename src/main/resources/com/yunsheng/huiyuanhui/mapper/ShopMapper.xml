@@ -10,12 +10,14 @@
         <result column="invitePicUrl" jdbcType="VARCHAR" property="invitePicUrl"/>
         <result column="picUrls" jdbcType="VARCHAR" property="picUrls"/>
         <result column="mainPic" jdbcType="VARCHAR" property="mainPic"/>
+        <result column="shopLatitude" jdbcType="VARCHAR" property="shopLatitude"/>
+        <result column="shopLongitude" jdbcType="VARCHAR" property="shopLongitude"/>
     </resultMap>
     <sql id="Base_Column_List">
-        shop_id, shop_name, shop_addr, shop_desc, invitePicUrl, picUrls, mainPic
+        shop_id, shop_name, shop_addr, shop_desc, invitePicUrl, picUrls, mainPic,shopLatitude,shopLongitude
     </sql>
     <sql id="Base_Column_List_A">
-        a.shop_id, a.shop_name, a.shop_addr, a.shop_desc, a.invitePicUrl, a.picUrls, a.mainPic
+        a.shop_id, a.shop_name, a.shop_addr, a.shop_desc, a.invitePicUrl, a.picUrls, a.mainPic, a.shopLatitude, a.shopLongitude
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select
@@ -28,12 +30,15 @@
         WHERE shop_id = #{shopId,jdbcType=INTEGER}
     </delete>
     <insert id="insert" parameterType="com.yunsheng.huiyuanhui.model.Shop">
-        INSERT INTO shop (shop_id, shop_name, shop_addr, shop_desc, invitePicUrl, picUrls, mainPic)
+        INSERT INTO shop (shop_id, shop_name, shop_addr, shop_desc, invitePicUrl, picUrls, mainPic,
+        shopLatitude, shopLongitude)
         VALUES
             (#{shopId,jdbcType=INTEGER}, #{shopName,jdbcType=VARCHAR}, #{shopAddr,jdbcType=VARCHAR},
-              #{shopDesc,jdbcType=VARCHAR}, #{invitePicUrl,jdbcType=VARCHAR}, #{picUrls,jdbcType=VARCHAR}, #{mainPic,jdbcType=VARCHAR})
+              #{shopDesc,jdbcType=VARCHAR}, #{invitePicUrl,jdbcType=VARCHAR}, #{picUrls,jdbcType=VARCHAR},
+               #{mainPic,jdbcType=VARCHAR}, #{shopLatitude,jdbcType=VARCHAR}, #{shopLongitude,jdbcType=VARCHAR})
     </insert>
-    <insert id="insertSelective" parameterType="com.yunsheng.huiyuanhui.model.Shop"  useGeneratedKeys="true" keyProperty="shopId" keyColumn="shop_id">
+    <insert id="insertSelective" parameterType="com.yunsheng.huiyuanhui.model.Shop" useGeneratedKeys="true"
+            keyProperty="shopId" keyColumn="shop_id">
         insert into shop
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="shopName != null">
@@ -53,6 +58,12 @@
             </if>
             <if test="mainPic != null">
                 mainPic,
+            </if>
+            <if test="shopLatitude != null">
+                shopLatitude,
+            </if>
+            <if test="shopLongitude != null">
+                shopLongitude,
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -74,6 +85,13 @@
             <if test="mainPic != null">
                 #{mainPic,jdbcType=VARCHAR},
             </if>
+            <if test="shopLatitude != null">
+                #{shopLatitude,jdbcType=VARCHAR},
+            </if>
+            <if test="shopLongitude != null">
+                #{shopLongitude,jdbcType=VARCHAR},
+            </if>
+
         </trim>
     </insert>
     <update id="updateByPrimaryKeySelective" parameterType="com.yunsheng.huiyuanhui.model.Shop">
@@ -97,6 +115,13 @@
             <if test="mainPic != null">
                 mainPic = #{mainPic,jdbcType=VARCHAR},
             </if>
+            <if test="shopLatitude != null">
+                #{shopLatitude,jdbcType=VARCHAR},
+            </if>
+            <if test="shopLongitude != null">
+                #{shopLongitude,jdbcType=VARCHAR},
+            </if>
+
         </set>
         where shop_id = #{shopId,jdbcType=INTEGER}
     </update>
@@ -107,7 +132,9 @@
             shop_desc    = #{shopDesc,jdbcType=VARCHAR},
             invitePicUrl    = #{invitePicUrl,jdbcType=VARCHAR},
             picUrls = #{picUrls,jdbcType=VARCHAR},
-            mainPic = #{mainPic,jdbcType=VARCHAR}
+            mainPic = #{mainPic,jdbcType=VARCHAR},
+            shopLatitude = #{shopLatitude,jdbcType=VARCHAR},
+            shopLongitude = #{shopLongitude,jdbcType=VARCHAR},
         WHERE shop_id = #{shopId,jdbcType=INTEGER}
     </update>
 
@@ -118,5 +145,14 @@
         INNER JOIN shop_user_map b
         on a.shop_id = b.shopId
         and b.userId = #{userId,jdbcType=INTEGER}
+    </select>
+
+    <select id="selectNearShop" parameterType="java.lang.Double" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>,
+        (POWER(MOD(ABS(shopLongitude - #{longitude}),360),2) + POWER(ABS(shopLatitude - #{latitude}),2)) AS distance
+        FROM shop
+        WHERE shop.shopLatitude IS NOT NULL AND shop.shopLongitude IS NOT NULL
+        ORDER BY distance LIMIT 20
     </select>
 </mapper>

@@ -38,4 +38,10 @@ public class ShopServiceImpl implements ShopService {
         int i = shopMapper.updateByPrimaryKeySelective(shop);
         return i;
     }
+
+    @Override
+    public List<Shop> findNearShops(Double longitude, Double latitude) {
+        List<Shop> shops = shopMapper.selectNearShop(longitude, latitude);
+        return shops;
+    }
 }

@@ -12,4 +12,6 @@ public interface ShopService {
     Shop findShopByPk(Integer shopId);
 
     Integer modifyShop(Shop shop);
+
+    List<Shop> findNearShops(Double longitude, Double latitude);
 }
