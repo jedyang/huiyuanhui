@@ -40,6 +40,10 @@ public class CardsController {
     public MyResult getAllMember(@RequestParam(name = "memberId") Integer memberId) {
         MyResult result = new MyResult();
 
+        if (null == memberId){
+            return MyResult.getFailReault("会员id为空");
+        }
+
         try {
             ShopMemberMap shopMemberMap = new ShopMemberMap();
             shopMemberMap.setMemberId(memberId);
