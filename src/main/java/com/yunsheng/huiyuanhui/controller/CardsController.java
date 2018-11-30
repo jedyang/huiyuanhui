@@ -40,6 +40,10 @@ public class CardsController {
     public MyResult getAllMember(@RequestParam(name = "memberId") Integer memberId) {
         MyResult result = new MyResult();
 
+        if (null == memberId){
+            return MyResult.getFailReault("会员id为空");
+        }
+
         try {
             ShopMemberMap shopMemberMap = new ShopMemberMap();
             shopMemberMap.setMemberId(memberId);
@@ -65,6 +69,31 @@ public class CardsController {
     @PostMapping("/pay")
     public MyResult<ConsumeLog> pay(@RequestBody Pay pay) {
         MyResult<ConsumeLog> result = new MyResult<>();
+        // 后台的支付校验
+        if (pay.getUseMoney() < 0 || pay.getUsePoint() < 0 || (pay.getUseMoney() == 0 && pay.getUsePoint() == 0)) {
+            result.setSuccess(false);
+            result.setMsg("支付金额异常");
+            result.setStatus(1);
+            return result;
+        }
+
+        ShopMemberMap byPK = shopMemberMapService.findByPK(pay.getCardId());
+        if (byPK == null){
+            result.setSuccess(false);
+            result.setMsg("未查到该会员");
+            result.setStatus(1);
+            return result;
+        }else if (byPK.getMoney() < pay.getUseMoney() ){
+            result.setSuccess(false);
+            result.setMsg("支付金额不足");
+            result.setStatus(1);
+            return result;
+        }else if (byPK.getPoint() < pay.getUsePoint() ){
+            result.setSuccess(false);
+            result.setMsg("支付积分不足");
+            result.setStatus(1);
+            return result;
+        }
 
         try {
             ConsumeLog payResult = shopMemberMapService.pay(pay);
@@ -80,6 +109,7 @@ public class CardsController {
             }
 
         } catch (Exception e) {
+            logger.error("支付异常：", e);
             result.setSuccess(false);
             result.setMsg("支付失败");
             result.setStatus(1);

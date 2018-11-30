@@ -32,6 +32,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+
 public class HttpUtil {
 
     private static final Logger logger = LoggerFactory.getLogger(HttpUtil.class);
@@ -39,7 +40,7 @@ public class HttpUtil {
     /**
      * post请求（用于请求json格式的参数）
      */
-    public static String sendPost4QrCode(String url, JSONObject params) {
+    public static String sendPost4QrCode(String url, JSONObject params, String prePath) {
         String result = "";
         CloseableHttpClient client = HttpClients.createDefault();
         HttpPost httpPost = new HttpPost(url);
@@ -58,10 +59,14 @@ public class HttpUtil {
                 HttpEntity responseEntity = response.getEntity();
                 InputStream content = responseEntity.getContent();
                 String scene = params.getString("scene");
+                // 先存成本地图片
                 String filePath = saveToImgByInputStream(content, scene + ".jpeg");
-
                 // 存到七牛云
-                String qrCodeUrl = QiniuUtil.uploadFile2Qiniu(filePath, "invite:");
+                String qrCodeUrl = QiniuUtil.uploadFile2Qiniu(filePath, prePath);
+                // 把本地图片删除
+                if (!QiniuUtil.ERR.equalsIgnoreCase(qrCodeUrl)){
+                    deleteLocalFile(filePath);
+                }
                 return qrCodeUrl;
             } else {
                 logger.error("请求返回:" + state + "(" + url + ")");
@@ -84,6 +89,7 @@ public class HttpUtil {
         }
         return result;
     }
+
 
     /**
      * post请求(用于key-value格式的参数)
@@ -186,5 +192,18 @@ public class HttpUtil {
             }
         }
         return file.getPath();
+    }
+
+    /**
+     * 删除本地文件
+     * @param filePath
+     */
+    private static void deleteLocalFile(String filePath) {
+        File file = new File(filePath);
+
+        boolean delete = file.delete();
+        if (!delete){
+            logger.error("文件删除失败：" + filePath);
+        }
     }
 }

@@ -2,6 +2,7 @@ package com.yunsheng.huiyuanhui.mapper;
 
 import com.yunsheng.huiyuanhui.model.Shop;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -21,4 +22,6 @@ public interface ShopMapper {
     int updateByPrimaryKey(Shop record);
 
     List<Shop> selectAllShopsOfUser(Integer userId);
+
+    List<Shop> selectNearShop(@Param("longitude") Double longitude, @Param("latitude") Double latitude);
 }

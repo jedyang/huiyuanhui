@@ -75,7 +75,7 @@ public class ShopController {
 
             Integer shopId = shopInfo.getShopId();
             // 为店铺生成二维码
-            String qrCodeUrl = WeiXinUtil.getQRCode(shopId.toString());
+            String qrCodeUrl = WeiXinUtil.getQRCode(shopId.toString(), "", "invite:");//TODO
             if (!"err".equalsIgnoreCase(qrCodeUrl)) {
                 shopInfo.setInvitePicUrl(qrCodeUrl);
             }
@@ -120,7 +120,7 @@ public class ShopController {
      */
     @GetMapping("/myShops")
     public MyResult<List> getShopInfo(Integer userId) {
-        MyResult result = new MyResult();
+        MyResult<List> result = new MyResult<>();
 
         List<Shop> allShopsOfUser = shopService.findAllShopsOfUser(userId);
 
@@ -157,10 +157,19 @@ public class ShopController {
     }
 
     @GetMapping("/getAccessToken")
-    public String getAccessToken() {
+    public MyResult<String> getAccessToken() {
         logger.info("===getAccessToken===");
-        String accessToken = WeiXinUtil.getAccessToken();
-        return accessToken;
+        MyResult<String> result = new MyResult<>();
+        String accessToken = null;
+        try {
+            accessToken = WeiXinUtil.getAccessToken();
+            result.setSuccess(true);
+            result.setResult(accessToken);
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.setSuccess(false);
+        }
+        return result;
     }
 
     @GetMapping("/getQrCode")
@@ -172,6 +181,26 @@ public class ShopController {
         return Constants.URL_DOMAIN + qrCode;
     }
 
+    /**
+     * 获取支付二维码
+     *
+     * @return
+     */
+    @GetMapping("/getPayQrCode")
+    public MyResult<String> getPayQrCode(String scene) {
+        logger.info("===getPayQrCode===");
+        MyResult<String> result = new MyResult<>();
+        String qrCode;
+        try {
+            qrCode = WeiXinUtil.getQRCode(scene, "", "pay:");//TODO
+            result.setSuccess(true);
+            result.setResult(Constants.URL_DOMAIN + qrCode);
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.setSuccess(false);
+        }
+        return result;
+    }
     /**
      * 给店铺添加用户 一个店铺可以有多个用户管理
      */
@@ -208,6 +237,24 @@ public class ShopController {
         String accessToken = QiniuUtil.getQiniuToken();
 
 
+        return result;
+    }
+
+    @GetMapping("/getNearShops")
+    public MyResult getNearShops(@RequestParam Double longitude, @RequestParam Double latitude){
+        logger.info("===getNearShops===");
+        MyResult<List> result = new MyResult<>();
+
+        try {
+            List<Shop> nearShops = shopService.findNearShops(longitude, latitude);
+            result.setResult(nearShops);
+            result.setSuccess(true);
+            result.setStatus(0);
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.setSuccess(false);
+            result.setStatus(1);
+        }
         return result;
     }
 }

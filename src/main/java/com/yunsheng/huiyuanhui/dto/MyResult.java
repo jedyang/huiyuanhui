@@ -37,4 +37,20 @@ public class MyResult<T> {
     public void setMsg(String msg) {
         this.msg = msg;
     }
+
+    public static MyResult getSuccessReault(Object t) {
+        MyResult myResult = new MyResult();
+        myResult.setSuccess(true);
+        myResult.setStatus(0);
+        myResult.setResult(t);
+        return myResult;
+    }
+
+    public static MyResult getFailReault(String msg) {
+        MyResult myResult = new MyResult();
+        myResult.setSuccess(false);
+        myResult.setStatus(1);
+        myResult.setMsg(msg);
+        return myResult;
+    }
 }

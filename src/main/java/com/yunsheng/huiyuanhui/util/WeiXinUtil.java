@@ -56,18 +56,15 @@ public class WeiXinUtil {
     }
 
     // 生成小程序码
-    public static String getQRCode(String shopId) {
-        String result = "";
+    public static String getQRCode(String scene, String page, String prePath) {
         String token = getAccessToken();
         String url = Constants.WX_QRCODE_URL + "?access_token=" + token;
-//        String params = "{ 'scene':'test', 'page':'' }";
-
 
         JSONObject params = new JSONObject();
-        params.put("scene", shopId);
-        params.put("page", "");// TODO上线后换成index
+        params.put("scene", scene);
+        params.put("page", page);// TODO上线后换成index
 
-        String postResult = HttpUtil.sendPost4QrCode(url, params);
+        String postResult = HttpUtil.sendPost4QrCode(url, params, prePath);
         return postResult;
     }
 

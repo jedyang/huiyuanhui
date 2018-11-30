@@ -13,7 +13,7 @@ public class WeiXinUtilTest {
 
     @Test
     public void getQrCode() throws Exception {
-        String accessToken =  WeiXinUtil.getQRCode("123");
+        String accessToken =  WeiXinUtil.getQRCode("123", "", "invite");
         System.out.println(accessToken);
     }
 
