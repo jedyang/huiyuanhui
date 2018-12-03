@@ -1,5 +1,7 @@
 package com.yunsheng.huiyuanhui.controller.admin;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -8,11 +10,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/admin")
 public class AdminLoginController {
 
-//    @RequestMapping(value = "/login")
-//    public String login() {
-//        System.out.println("login===");
-//        return "login";
-//    }
+    private static final Logger logger = LoggerFactory.getLogger(AdminLoginController.class);
+
+    @RequestMapping(value = "/login")
+    public String login() {
+        logger.info("login===");
+        return "login";
+    }
 
 
 }
