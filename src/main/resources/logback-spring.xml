@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <!-- 属性文件 -->
-    <property name="processName" value="huiyuanhui"/>
-    <property name="logDir" value="${user.dir}/logs/xxx"/>
+    <!-- 定义属性，下文会使用 非必须-->
+    <property name="logDir" value="${user.dir}/logs/"/>
 
     <!-- 默认的控制台日志输出，一般生产环境都是后台启动，这个没太大作用 -->
     <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
@@ -16,24 +15,45 @@
     <appender name="logfile" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <!--<Encoding>UTF-8</Encoding>-->
         <File>${logDir}/service.log</File>
+        <!-- 日志记录器的滚动策略，按日期，按大小记录 -->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <FileNamePattern>${logDir}/history/service.%d{yyyy-MM-dd}.log.gz</FileNamePattern>
+            <FileNamePattern>${logDir}/history/service.%d{yyyy-MM-dd}.%i.log</FileNamePattern>
+            <!-- 配置超过一定大小切分一下 -->
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>500MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <!--日志文件保留天数-->
             <maxHistory>30</maxHistory>
         </rollingPolicy>
+
         <layout class="ch.qos.logback.classic.PatternLayout">
             <pattern>%date [%thread] %-5level %logger{50}:%L - %msg%n</pattern>
         </layout>
     </appender>
 
 
-    <!-- 修改其他包的日志输出级别 -->
+    <!--
+    <logger>用来设置某一个包或者具体的某一个类的日志打印级别、
+    以及指定<appender>。<logger>仅有一个name属性，
+    一个可选的level和一个可选的addtivity属性。
+    name:用来指定受此logger约束的某一个包或者具体的某一个类。
+    level:用来设置打印级别，大小写无关：TRACE, DEBUG, INFO, WARN, ERROR, ALL 和 OFF，
+          还有一个特俗值INHERITED或者同义词NULL，代表强制执行上级的级别。
+          如果未设置此属性，那么当前logger将会继承上级的级别。
+    addtivity:是否向上级logger传递打印信息。默认是true。
+    -->
     <logger name="org.apache.zookeeper">
         <level value="WARN"/>
     </logger>
 
-    <!-- root 默认日志配置 ， 注意这里的级别哈！小心生产环境用DEBUG，压爆你的磁盘！-->
-    <root level="DEBUG">
-    <!--<root level="INFO">-->
+    <!--
+      root节点是必选节点，用来指定最基础的日志输出级别，只有一个level属性
+      level:用来设置打印级别，大小写无关：TRACE, DEBUG, INFO, WARN, ERROR, ALL 和 OFF，
+      默认是DEBUG
+      可以包含零个或多个元素，标识这个appender将会添加到这个logger。
+    -->
+    <root level="INFO">
         <appender-ref ref="logfile"/>
         <appender-ref ref="stdout"/>
     </root>
