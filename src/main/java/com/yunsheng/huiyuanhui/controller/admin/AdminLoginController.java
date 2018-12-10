@@ -7,12 +7,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 
 @Controller
-@RequestMapping("/admin")
+@RequestMapping("/")
 public class AdminLoginController {
 
     private static final Logger logger = LoggerFactory.getLogger(AdminLoginController.class);
 
-    @RequestMapping(value = "/login")
+    @RequestMapping(value = "login")
     public String login() {
         logger.info("login===");
         return "login";
